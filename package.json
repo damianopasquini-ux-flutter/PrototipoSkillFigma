@@ -1,0 +1,10 @@
+{
+  "name": "prototipo-skill-figma",
+  "version": "1.0.0",
+  "description": "Sisal Betting App DS - Components from Figma",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  }
+}
