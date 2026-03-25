@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sisal Betting App DS - Component Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   DESIGN TOKENS
+   ============================================= */
+:root {
+  --sisal-green: #bed62f;
+  --sisal-dark: #262c2f;
+  --sisal-dark-alt: #2f3c43;
+  --sisal-surface: #f5f5f5;
+  --sisal-white: #ffffff;
+  --sisal-text: #262c2f;
+  --sisal-text-alt: #5c6063;
+  --sisal-text-muted: #929597;
+  --sisal-border: #c9cacb;
+  --sisal-border-alt: #e9eaea;
+  --sisal-orange: #ff8e0d;
+  --sisal-red: #e73947;
+  --sisal-yellow: #ffbf00;
+  --sisal-blue: #67aaf9;
+  --sisal-blue-dark: #0d4ea5;
+  --sisal-purple: #722dad;
+  --sisal-green-dark: #1a924b;
+  --sisal-green-link: #00653b;
+  --sisal-sidebar: #1a1f22;
+  --sidebar-w: 280px;
+  --header-h: 64px;
+}
+
+/* =============================================
+   RESET & BASE
+   ============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+body {
+  font-family: 'Roboto', sans-serif;
+  color: var(--sisal-text);
+  background: var(--sisal-surface);
+  line-height: 1.5;
+}
+
+/* =============================================
+   LAYOUT
+   ============================================= */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--header-h);
+  background: var(--sisal-dark);
+  display: flex; align-items: center; padding: 0 24px;
+  border-bottom: 3px solid var(--sisal-green);
+  gap: 16px;
+}
+.header__logo {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 800; font-size: 20px;
+  color: var(--sisal-white);
+  letter-spacing: -0.3px;
+}
+.header__logo span { color: var(--sisal-green); }
+.header__sub {
+  font-size: 13px; color: var(--sisal-text-muted);
+  border-left: 1px solid var(--sisal-text-muted);
+  padding-left: 16px; margin-left: 4px;
+}
+.header__count {
+  margin-left: auto;
+  background: var(--sisal-green);
+  color: var(--sisal-dark);
+  font-weight: 700; font-size: 12px;
+  padding: 4px 12px; border-radius: 100px;
+}
+.header__hamburger {
+  display: none; background: none; border: none; cursor: pointer; padding: 8px;
+}
+.header__hamburger svg { display: block; }
+
+.sidebar {
+  position: fixed; top: var(--header-h); left: 0; bottom: 0;
+  width: var(--sidebar-w); overflow-y: auto;
+  background: var(--sisal-sidebar);
+  padding: 16px 0 40px;
+  z-index: 90;
+  transition: transform 0.3s ease;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+
+.sidebar__group { margin-bottom: 8px; }
+.sidebar__group-title {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700; font-size: 11px;
+  color: var(--sisal-green);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 12px 20px 6px;
+}
+.sidebar__link {
+  display: block; padding: 6px 20px 6px 28px;
+  font-size: 13px; color: #aaa;
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+}
+.sidebar__link:hover {
+  color: var(--sisal-white);
+  background: rgba(255,255,255,0.04);
+  border-left-color: var(--sisal-green);
+}
+
+.main {
+  margin-left: var(--sidebar-w);
+  margin-top: var(--header-h);
+  padding: 32px 40px 80px;
+  max-width: 1200px;
+}
+
+/* =============================================
+   COMPONENT SECTION
+   ============================================= */
+.comp-section {
+  margin-bottom: 48px;
+  scroll-margin-top: 80px;
+}
+.comp-section__title {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 800; font-size: 24px;
+  color: var(--sisal-dark);
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 10px;
+}
+.comp-section__title::before {
+  content: '';
+  width: 4px; height: 24px;
+  background: var(--sisal-green);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.comp-section__import {
+  font-size: 12px; color: var(--sisal-text-muted);
+  background: var(--sisal-dark);
+  padding: 6px 14px; border-radius: 6px;
+  font-family: 'Roboto Mono', monospace;
+  margin-bottom: 16px; display: inline-block;
+}
+.comp-section__import code { color: var(--sisal-green); }
+
+.comp-card {
+  background: var(--sisal-white);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border: 1px solid #e5e5e5;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.comp-card__preview {
+  padding: 24px;
+  display: flex; flex-wrap: wrap; gap: 12px;
+  align-items: center;
+  min-height: 60px;
+}
+.comp-card__preview--dark {
+  background: var(--sisal-dark-alt);
+}
+.comp-card__preview--col {
+  flex-direction: column; align-items: flex-start;
+}
+
+.props-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.props-table th {
+  text-align: left;
+  padding: 8px 16px;
+  background: var(--sisal-surface);
+  font-weight: 600; font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--sisal-text-muted);
+  border-top: 1px solid #e5e5e5;
+}
+.props-table td {
+  padding: 8px 16px;
+  border-top: 1px solid #f0f0f0;
+  vertical-align: top;
+}
+.props-table td:first-child {
+  font-weight: 500;
+  color: var(--sisal-purple);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+}
+.props-table td:nth-child(2) {
+  color: var(--sisal-blue-dark);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+}
+
+/* Category divider */
+.category-divider {
+  margin: 56px 0 24px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--sisal-green);
+}
+.category-divider h2 {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 800; font-size: 28px;
+  color: var(--sisal-dark);
+}
+.category-divider p {
+  font-size: 14px; color: var(--sisal-text-muted); margin-top: 4px;
+}
+
+/* =============================================
+   COMPONENT VISUAL STYLES
+   ============================================= */
+
+/* -- Buttons -- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 0 24px; height: 36px;
+  border-radius: 8px; border: none; cursor: pointer;
+  font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 14px;
+  transition: opacity 0.15s;
+}
+.btn:hover { opacity: 0.85; }
+.btn--default { background: var(--sisal-green); color: var(--sisal-dark); }
+.btn--checkout { background: var(--sisal-orange); color: white; }
+.btn--delete { background: var(--sisal-red); color: white; }
+.btn--secondary { background: transparent; color: var(--sisal-dark); border: 1px solid var(--sisal-dark); }
+.btn--ghost { background: transparent; color: var(--sisal-dark); }
+.btn--floating { background: var(--sisal-dark-alt); color: white; border-radius: 8px; }
+.btn--cashout { background: transparent; color: var(--sisal-dark); border: 1px solid var(--sisal-green-dark); }
+.btn--cashout-cashed { background: var(--sisal-green-dark); color: white; }
+.btn--cashout-acceptance { background: transparent; color: var(--sisal-orange); border: 1px solid var(--sisal-orange); }
+.btn--settings { background: transparent; color: var(--sisal-dark); border: 1px solid var(--sisal-border); }
+.btn--disabled { opacity: 0.4; cursor: not-allowed; }
+.btn--sm { height: 28px; padding: 0 16px; font-size: 12px; }
+
+/* -- Badges -- */
+.badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 4px; border-radius: 2px; overflow: hidden;
+  font-family: 'Roboto', sans-serif; font-weight: 500; white-space: nowrap;
+}
+.badge--s { height: 14px; font-size: 10px; }
+.badge--m { height: 18px; font-size: 12px; border-radius: 4px; }
+.badge--live { background: var(--sisal-dark); color: var(--sisal-orange); }
+.badge--promo { background: var(--sisal-yellow); color: var(--sisal-dark); }
+.badge--info { background: var(--sisal-blue); color: var(--sisal-dark); }
+.badge--cashout { background: var(--sisal-purple); color: white; }
+.badge--breaking { background: var(--sisal-orange); color: var(--sisal-dark); }
+.badge--default { background: var(--sisal-green); color: var(--sisal-dark); }
+.badge--win { background: var(--sisal-green-dark); color: white; }
+.badge--freebet { background: var(--sisal-yellow); color: var(--sisal-dark); }
+
+.badge-notif {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 100px; font-family: 'Roboto', sans-serif;
+  font-weight: 700; font-size: 10px;
+}
+.badge-notif--sm { width: 12px; height: 12px; }
+.badge-notif--md { width: 16px; height: 16px; }
+.badge-notif--lg { min-width: 16px; height: 16px; padding: 0 4px; }
+.badge-notif--orange { background: var(--sisal-orange); color: var(--sisal-dark); }
+.badge-notif--green { background: var(--sisal-green); color: var(--sisal-dark); }
+.badge-notif--dark { background: var(--sisal-dark); color: white; }
+.badge-notif--muted { background: var(--sisal-text-muted); color: white; }
+
+.badge-market {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 16px; padding: 0 4px; border-radius: 8px;
+  border: 1px solid var(--sisal-text-alt);
+  font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 10px;
+  color: var(--sisal-text-alt);
+}
+.badge-market--selected {
+  background: var(--sisal-green); border-color: var(--sisal-green);
+  color: var(--sisal-dark);
+}
+
+.badge-special {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 0 8px 0 4px; border-radius: 0 100px 100px 0;
+  height: 18px; font-family: 'Roboto', sans-serif;
+  font-weight: 500; font-size: 10px;
+}
+.badge-special--breaking { background: var(--sisal-orange); color: var(--sisal-dark); }
+.badge-special--increased { background: var(--sisal-dark); color: white; }
+
+.badge-tipster {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0 10px; border-radius: 100px;
+  font-family: 'Roboto', sans-serif; font-weight: 500; color: white;
+  font-size: 12px;
+}
+.badge-tipster--sm { height: 16px; }
+.badge-tipster--md { height: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.badge-tipster--lg { height: 28px; font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+.badge-fanta {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 24px; padding: 0 8px; border-radius: 100px;
+  font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* -- OddsSelection -- */
+.odds {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 2px;
+  width: 100px; height: 36px; border-radius: 8px;
+  font-family: 'Roboto', sans-serif; cursor: pointer;
+  transition: all 0.15s; border: none;
+}
+.odds--default { background: var(--sisal-border-alt); color: var(--sisal-dark); }
+.odds--selected { background: var(--sisal-green); color: var(--sisal-dark); }
+.odds--disabled { background: var(--sisal-border-alt); opacity: 0.4; cursor: not-allowed; }
+.odds--dark-selected { background: var(--sisal-dark); color: var(--sisal-green); }
+.odds__result { font-size: 12px; font-weight: 400; line-height: 14px; }
+.odds__quota { font-size: 12px; font-weight: 700; line-height: 1; }
+.odds__lock { color: var(--sisal-text-muted); font-size: 16px; }
+
+/* -- Toggle -- */
+.toggle {
+  position: relative; display: inline-flex; align-items: center;
+  width: 56px; height: 31px; border-radius: 1000px;
+  cursor: pointer; transition: background 0.2s; border: none;
+}
+.toggle--on { background: var(--sisal-green); }
+.toggle--off { background: var(--sisal-border); }
+.toggle--sm { width: 44px; height: 24px; }
+.toggle__thumb {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 27px; height: 27px; border-radius: 50%;
+  background: white; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: left 0.2s;
+}
+.toggle--on .toggle__thumb { left: 27px; }
+.toggle--off .toggle__thumb { left: 2px; }
+.toggle--sm .toggle__thumb { width: 20px; height: 20px; }
+.toggle--sm.toggle--on .toggle__thumb { left: 22px; }
+.toggle--sm.toggle--off .toggle__thumb { left: 2px; }
+.toggle--disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* -- Checkbox / Radio -- */
+.checkbox-demo, .radio-demo {
+  display: inline-flex; align-items: center; gap: 4px; cursor: pointer;
+  font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500;
+}
+.checkbox-box {
+  width: 24px; height: 24px; border-radius: 4px; border: 1.5px solid var(--sisal-text-muted);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.checkbox-box--checked {
+  background: var(--sisal-green); border-color: var(--sisal-green);
+}
+.checkbox-box--checked::after {
+  content: ''; display: block; width: 6px; height: 10px;
+  border: solid white; border-width: 0 2px 2px 0;
+  transform: rotate(45deg); margin-top: -2px;
+}
+.checkbox-box--disabled { border-color: #c9cacb; }
+.checkbox-box--disabled.checkbox-box--checked { background: #c9cacb; border-color: #c9cacb; }
+
+.radio-circle {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: 1.5px solid var(--sisal-text-muted);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.radio-circle--checked { border-color: var(--sisal-green); }
+.radio-circle--checked::after {
+  content: ''; display: block; width: 10px; height: 10px;
+  border-radius: 50%; background: var(--sisal-green);
+}
+
+/* -- Filter Chips -- */
+.filter-chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 32px; padding: 0 8px; border-radius: 8px;
+  font-family: 'Roboto', sans-serif; font-weight: 500; font-size: 12px;
+  cursor: pointer; border: none; transition: all 0.15s;
+}
+.filter-chip--default { background: white; color: var(--sisal-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.filter-chip--selected { background: var(--sisal-green); color: var(--sisal-dark); }
+.filter-chip--dark { background: var(--sisal-dark-alt); color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+.filter-floating {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 36px; padding: 0 24px; border-radius: 100px;
+  background: var(--sisal-green); color: var(--sisal-dark);
+  font-family: 'Roboto', sans-serif; font-weight: 700; font-size: 14px;
+  border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* -- Searchbar -- */
+.searchbar {
+  display: flex; align-items: center; gap: 8px;
+  height: 40px; padding: 0 8px; border-radius: 8px;
+  background: var(--sisal-border-alt);
+  font-family: 'Roboto', sans-serif; font-size: 14px;
+  color: var(--sisal-text-muted); width: 328px;
+}
+.searchbar--active {
+  background: white; box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+.searchbar__icon { flex-shrink: 0; color: var(--sisal-text-muted); }
+
+/* -- TextField -- */
+.textfield {
+  display: flex; flex-direction: column; gap: 4px; width: 280px;
+}
+.textfield__label {
+  font-size: 12px; padding: 0 16px;
+}
+.textfield__input {
+  border: none; border-bottom: 1px solid var(--sisal-text-muted);
+  padding: 8px 16px; font-family: 'Roboto', sans-serif;
+  font-size: 14px; background: transparent; outline: none;
+}
+.textfield__input:focus { border-bottom-color: var(--sisal-dark); }
+.textfield__input--error { border-bottom-color: var(--sisal-red); }
+.textfield__helper {
+  font-size: 12px; padding: 0 16px;
+  color: var(--sisal-text-muted);
+}
+.textfield__helper--error { color: var(--sisal-red); }
+
+/* -- Dropdown -- */
+.dropdown-demo {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 36px; padding: 0 4px 0 8px;
+  border: 1px solid var(--sisal-text-muted); border-radius: 8px;
+  font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 500;
+  cursor: pointer; min-width: 132px;
+}
+.dropdown-demo--dark {
+  border-color: var(--sisal-text-muted); color: white;
+}
+
+/* -- Snackbar -- */
+.snackbar {
+  display: flex; align-items: center; gap: 16px;
+  padding: 8px 16px; border-radius: 8px; border: 1px solid;
+  width: 328px; font-family: 'Roboto', sans-serif;
+}
+.snackbar--error { background: #ffeaeb; border-color: var(--sisal-red); }
+.snackbar--warning { background: #fff6dc; border-color: var(--sisal-yellow); }
+.snackbar--info { background: #e1eefe; border-color: var(--sisal-blue-dark); }
+.snackbar--success { background: #e6fff0; border-color: var(--sisal-green-dark); }
+.snackbar__icon { font-size: 24px; flex-shrink: 0; }
+.snackbar__content { flex: 1; min-width: 0; }
+.snackbar__title { font-size: 14px; font-weight: 500; }
+.snackbar__subtitle { font-size: 12px; margin-top: 2px; }
+.snackbar__link { font-size: 12px; font-weight: 500; text-decoration: underline; flex-shrink: 0; cursor: pointer; }
+
+/* -- InlineMessage -- */
+.inline-msg {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 12px 16px; border-radius: 8px;
+  font-family: 'Roboto', sans-serif; font-size: 14px; width: 328px;
+}
+.inline-msg--info { background: #e1eefe; }
+.inline-msg--warning { background: #fff6dc; }
+.inline-msg--error { background: #ffeaeb; }
+.inline-msg--success { background: #e6fff0; }
+
+/* -- Label -- */
+.label-status {
+  display: inline-flex; align-items: center; padding: 4px 8px;
+  border-radius: 4px; font-family: 'Roboto', sans-serif;
+  font-size: 12px; font-weight: 500; color: white;
+}
+.label-status--win { background: #0b7d3e; }
+.label-status--loser { background: var(--sisal-red); }
+.label-status--pending { background: var(--sisal-text-muted); }
+.label-status--refund { background: var(--sisal-blue-dark); }
+
+/* -- Tooltip -- */
+.tooltip-demo {
+  position: relative; display: inline-flex; flex-direction: column;
+  min-width: 240px; max-width: 240px; font-family: 'Roboto', sans-serif;
+}
+.tooltip-demo__card {
+  background: white; border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 12px;
+}
+.tooltip-demo__arrow {
+  width: 0; height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 18px solid white;
+  margin-left: 24px;
+}
+
+/* -- Cards -- */
+.card-demo {
+  background: white; border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 8px; font-family: 'Roboto', sans-serif;
+  width: 328px;
+}
+.card-demo--sm { width: 160px; }
+.card-demo--full { width: 100%; max-width: 360px; }
+
+/* -- Navigation Bottom -- */
+.nav-bottom {
+  display: flex; flex-direction: column; width: 360px;
+  background: var(--sisal-dark-alt);
+}
+.nav-bottom__bar {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  padding: 0 8px; height: 58px;
+  border-top: 1px solid #3a474e;
+}
+.nav-bottom__item {
+  display: flex; flex-direction: column; align-items: center;
+  flex: 1; min-width: 0; gap: 6px; padding-bottom: 8px;
+}
+.nav-bottom__indicator {
+  width: 64px; height: 4px; border-radius: 0 0 8px 8px;
+}
+.nav-bottom__indicator--active { background: var(--sisal-green); }
+.nav-bottom__icon {
+  width: 24px; height: 24px; border-radius: 4px;
+  background: rgba(255,255,255,0.1);
+}
+.nav-bottom__icon--active { background: rgba(190,214,47,0.2); }
+.nav-bottom__label {
+  font-family: 'Roboto', sans-serif; font-size: 12px;
+  color: white; white-space: nowrap;
+}
+.nav-bottom__label--active { color: var(--sisal-green); font-weight: 700; }
+.nav-bottom__home {
+  display: flex; align-items: center; justify-content: center;
+  height: 34px; background: var(--sisal-dark-alt);
+}
+.nav-bottom__home-bar {
+  width: 134px; height: 5px; background: white; border-radius: 100px;
+}
+
+/* -- Navigation Top -- */
+.nav-top {
+  display: flex; align-items: center; height: 44px;
+  padding: 0 8px; width: 360px;
+  background: var(--sisal-dark-alt);
+}
+.nav-top__title {
+  flex: 1; font-family: 'Mulish', sans-serif;
+  font-weight: 700; font-size: 16px; color: white;
+  padding-left: 8px;
+}
+
+/* -- Segmented Controls -- */
+.segmented {
+  display: inline-flex; background: var(--sisal-border-alt);
+  border-radius: 8px; padding: 2px; gap: 2px;
+}
+.segmented__item {
+  padding: 6px 16px; border-radius: 6px;
+  font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 500;
+  cursor: pointer; border: none; background: transparent;
+  color: var(--sisal-text);
+  transition: all 0.15s;
+}
+.segmented__item--active {
+  background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-weight: 700;
+}
+
+/* -- Skeleton -- */
+.skeleton {
+  background: linear-gradient(90deg, #e9eaea 25%, #f5f5f5 50%, #e9eaea 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* -- Loader -- */
+.loader {
+  width: 32px; height: 32px;
+  border: 3px solid var(--sisal-border-alt);
+  border-top-color: var(--sisal-green);
+  border-radius: 50%;
+  animation: loader-spin 0.8s linear infinite;
+}
+@keyframes loader-spin { to { transform: rotate(360deg); } }
+
+/* -- Modal -- */
+.modal-demo {
+  width: 360px; background: var(--sisal-dark);
+  font-family: 'Roboto', sans-serif; color: white;
+  border-radius: 12px; overflow: hidden;
+}
+.modal-demo__nav {
+  display: flex; align-items: center; padding: 0 8px 0 16px; height: 44px;
+}
+.modal-demo__nav-title {
+  flex: 1; font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 16px;
+}
+.modal-demo__content { padding: 16px; }
+
+/* -- Banner -- */
+.banner-demo {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 8px;
+  width: 328px; font-family: 'Roboto', sans-serif;
+}
+.banner-demo--promo {
+  background: linear-gradient(135deg, var(--sisal-green) 0%, #9bc01f 100%);
+  color: var(--sisal-dark);
+}
+.banner-demo--info {
+  background: var(--sisal-dark); color: white;
+}
+
+/* -- Streaming -- */
+.streaming-demo {
+  width: 328px; height: 180px; background: var(--sisal-dark);
+  border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; color: white; position: relative;
+}
+.streaming-demo__play {
+  width: 48px; height: 48px; background: rgba(255,255,255,0.2);
+  border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-size: 20px;
+}
+
+/* -- PageControl -- */
+.page-control {
+  display: inline-flex; gap: 6px; align-items: center;
+}
+.page-control__dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--sisal-border);
+}
+.page-control__dot--active {
+  background: var(--sisal-green); width: 24px; border-radius: 4px;
+}
+
+/* -- TabBar -- */
+.tabbar {
+  display: flex; gap: 0; width: 360px;
+  border-bottom: 2px solid var(--sisal-border-alt);
+}
+.tabbar__item {
+  flex: 1; padding: 10px 0; text-align: center;
+  font-family: 'Roboto', sans-serif; font-size: 12px;
+  font-weight: 500; color: var(--sisal-text-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px; cursor: pointer;
+  background: none; border-left: none; border-right: none; border-top: none;
+}
+.tabbar__item--active {
+  color: var(--sisal-dark); font-weight: 700;
+  border-bottom-color: var(--sisal-green);
+}
+
+/* -- Link -- */
+.link-demo {
+  font-family: 'Roboto', sans-serif; font-size: 14px;
+  font-weight: 500; color: var(--sisal-green-link);
+  text-decoration: underline; cursor: pointer;
+}
+
+/* -- Quicklink -- */
+.quicklink {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  width: 64px; cursor: pointer;
+}
+.quicklink__icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: var(--sisal-border-alt);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.quicklink__label {
+  font-family: 'Roboto', sans-serif; font-size: 10px;
+  text-align: center; color: var(--sisal-text);
+}
+
+/* -- Slider -- */
+.slider-demo {
+  width: 280px; appearance: none; height: 4px;
+  background: var(--sisal-border-alt); border-radius: 2px;
+  outline: none;
+}
+.slider-demo::-webkit-slider-thumb {
+  appearance: none; width: 20px; height: 20px;
+  border-radius: 50%; background: var(--sisal-green);
+  cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+/* -- Placeholder for complex components -- */
+.placeholder {
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; min-height: 80px;
+  border: 2px dashed var(--sisal-border);
+  border-radius: 8px; color: var(--sisal-text-muted);
+  font-size: 13px; text-align: center;
+  background: rgba(233,234,234,0.3);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar--open { transform: translateX(0); }
+  .main { margin-left: 0; padding: 24px 16px 60px; }
+  .header__hamburger { display: block; }
+  .comp-card__preview { overflow-x: auto; }
+  .card-demo, .snackbar, .nav-bottom, .nav-top, .tabbar, .inline-msg, .banner-demo, .streaming-demo { max-width: 100%; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== HEADER ==================== -->
+<header class="header">
+  <button class="header__hamburger" onclick="document.querySelector('.sidebar').classList.toggle('sidebar--open')">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div class="header__logo">Sisal Betting App <span>DS</span></div>
+  <div class="header__sub">Component Library</div>
+  <div class="header__count">73 components</div>
+</header>
+
+<!-- ==================== SIDEBAR ==================== -->
+<nav class="sidebar" id="sidebar">
+
+  <div class="sidebar__group">
+    <div class="sidebar__group-title">Navigation</div>
+    <a class="sidebar__link" href="#NavigationBottom">NavigationBottom</a>
+    <a class="sidebar__link" href="#NavigationTab">NavigationTab</a>
+    <a class="sidebar__link" href="#NavigationTop">NavigationTop</a>
+    <a class="sidebar__link" href="#NavigationPanel">NavigationPanel</a>
+    <a class="sidebar__link" href="#TabBar">TabBar</a>
+    <a class="sidebar__link" href="#PageControl">PageControl</a>
+  </div>
+
+  <div class="sidebar__group">
+    <div class="sidebar__group-title">Actions</div>
+    <a class="sidebar__link" href="#Button">Button</a>
+    <a class="sidebar__link" href="#OddsSelection">OddsSelection</a>
+    <a class="sidebar__link" href="#Filter">Filter</a>
+    <a class="sidebar__link" href="#Searchbar">Searchbar</a>
+    <a class="sidebar__link" href="#Link">Link</a>
+    <a class="sidebar__link" href="#Quicklink">Quicklink</a>
+  </div>
+
+  <div class="sidebar__group">
+    <div class="sidebar__group-title">Forms</div>
+    <a class="sidebar__link" href="#TextField">TextField</a>
+    <a class="sidebar__link" href="#Dropdown">Dropdown</a>
+    <a class="sidebar__link" href="#Toggle">Toggle</a>
+    <a class="sidebar__link" href="#Checkbox">Checkbox</a>
+    <a class="sidebar__link" href="#SegmentedControls">SegmentedControls</a>
+    <a class="sidebar__link" href="#Picker">Picker</a>
+  </div>
+
+  <div class="sidebar__group">
+    <div class="sidebar__group-title">Data Display</div>
+    <a class="sidebar__link" href="#Badge">Badge</a>
+    <a class="sidebar__link" href="#Label">Label</a>
+    <a class="sidebar__link" href="#Field">Field</a>
+    <a class="sidebar__link" href="#Table">Table</a>
+    <a class="sidebar__link" href="#TimeIndicator">TimeIndicator</a>
+    <a class="sidebar__link" href="#BulletPoint">BulletPoint</a>
+    <a class="sidebar__link" href="#Skeleton">Skeleton</a>
+    <a class="sidebar__link" href="#Loader">Loader</a>
+  </div>
+
+  <div class="sidebar__group">
+    <div class="sidebar__group-title">Cards</div>
+    <a class="sidebar__link" href="#CardButton">CardButton</a>
+    <a class="sidebar__link" href="#CardMatch">CardMatch</a>
+    <a class="sidebar__link" href="#CardEvent">CardEvent</a>
+    <a class="sidebar__link" href="#CardAntepost">CardAntepost</a>
+    <a class="sidebar__link" href="#CardBetBuilder">CardBetBuilder</a>
+    <a class="sidebar__link" href="#CardAlarm">CardAlarm</a>
+    <a class="sidebar__link" href="#CardCartDetails">CardCartDetails</a>
+    <a class="sidebar__link" href="#CardMyBets">CardMyBets</a>
+    <a class="sidebar__link" href="#CardMyBetsTicket">CardMyBetsTicket</a>
+    <a class="sidebar__link" href="#CardTip">CardTip</a>
+    <a class="sidebar__link" href="#CardPlayer">CardPlayer</a>
+    <a class="sidebar__link" href="#CardFreebet">CardFreebet</a>
+    <a class="sidebar__link" href="#CardQuizbet">CardQuizbet</a>
+    <a class="sidebar__link" href="#CardRacommended">CardRacommended</a>
+    <a class="sidebar__link" href="#CardTabellone">CardTabellone</a>
+    <a class="sidebar__link" href="#CardFeedback">CardFeedback</a>
+    <a class="sidebar__link" href="#CardBreakingBets">CardBreakingBets</a>
+    <a class="sidebar__link" href="#CardBetFun">CardBetFun</a>
+  </div>
+
+  <div class="sidebar__group">
+    <div class="sidebar__group-title">Panels</div>
+    <a class="sidebar__link" href="#PanelCart">PanelCart</a>
+    <a class="sidebar__link" href="#PanelFilter">PanelFilter</a>
+    <a class="sidebar__link" href="#PanelLink">PanelLink</a>
+    <a class="sidebar__link" href="#PanelLongPress">PanelLongPress</a>
+    <a class="sidebar__link" href="#PanelOddsSelection">PanelOddsSelection</a>
+    <a class="sidebar__link" href="#PanelPrediction">PanelPrediction</a>
+    <a class="sidebar__link" href="#PanelSettings">PanelSettings</a>
+    <a class="sidebar__link" href="#PanelSport">PanelSport</a>
+    <a class="sidebar__link" href="#PanelText">PanelText</a>
+    <a class="sidebar__link" href="#PanelTipDetail">PanelTipDetail</a>
+  </div>
+
+  <div class="sidebar__group">
+    <div class="sidebar__group-title">Feedback</div>
+    <a class="sidebar__link" href="#Snackbar">Snackbar</a>
+    <a class="sidebar__link" href="#InlineMessage">InlineMessage</a>
+    <a class="sidebar__link" href="#Feedback">Feedback</a>
+    <a class="sidebar__link" href="#Banner">Banner</a>
+    <a class="sidebar__link" href="#Tooltip">Tooltip</a>
+    <a class="sidebar__link" href="#Modal">Modal</a>
+  </div>
+
+  <div class="sidebar__group">
+    <div class="sidebar__group-title">Content</div>
+    <a class="sidebar__link" href="#TitleText">TitleText</a>
+    <a class="sidebar__link" href="#Balloon">Balloon</a>
+    <a class="sidebar__link" href="#Listing">Listing</a>
+    <a class="sidebar__link" href="#Streaming">Streaming</a>
+    <a class="sidebar__link" href="#Tutorial">Tutorial</a>
+    <a class="sidebar__link" href="#ThankYouPage">ThankYouPage</a>
+    <a class="sidebar__link" href="#SelfBet">SelfBet</a>
+    <a class="sidebar__link" href="#SharedTip">SharedTip</a>
+    <a class="sidebar__link" href="#CartFloating">CartFloating</a>
+    <a class="sidebar__link" href="#Slider">Slider</a>
+  </div>
+
+  <div class="sidebar__group">
+    <div class="sidebar__group-title">Widgets</div>
+    <a class="sidebar__link" href="#WidgetTabellone">WidgetTabellone</a>
+    <a class="sidebar__link" href="#WidgetOpta">WidgetOpta</a>
+    <a class="sidebar__link" href="#Component3">Component3</a>
+  </div>
+</nav>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<main class="main">
+
+<!-- ============================
+     NAVIGATION
+     ============================ -->
+<div class="category-divider" style="margin-top:0">
+  <h2>Navigation</h2>
+  <p>Components for app navigation and wayfinding</p>
+</div>
+
+<!-- NavigationBottom -->
+<section class="comp-section" id="NavigationBottom">
+  <h3 class="comp-section__title">NavigationBottom</h3>
+  <div class="comp-section__import">import { <code>NavigationBottom</code> } from '@/components/NavigationBottom'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col" style="padding:0;background:var(--sisal-dark-alt)">
+      <div class="nav-bottom">
+        <div class="nav-bottom__bar">
+          <div class="nav-bottom__item">
+            <div class="nav-bottom__indicator nav-bottom__indicator--active"></div>
+            <div class="nav-bottom__icon nav-bottom__icon--active"></div>
+            <span class="nav-bottom__label nav-bottom__label--active">Home</span>
+          </div>
+          <div class="nav-bottom__item">
+            <div class="nav-bottom__indicator"></div>
+            <div class="nav-bottom__icon"></div>
+            <span class="nav-bottom__label">Tipster</span>
+          </div>
+          <div class="nav-bottom__item">
+            <div class="nav-bottom__indicator"></div>
+            <div style="position:relative">
+              <div class="nav-bottom__icon"></div>
+              <div style="position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--sisal-orange);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--sisal-dark)">3</div>
+            </div>
+            <span class="nav-bottom__label">Biglietto</span>
+          </div>
+          <div class="nav-bottom__item">
+            <div class="nav-bottom__indicator"></div>
+            <div class="nav-bottom__icon"></div>
+            <span class="nav-bottom__label">MyBets</span>
+          </div>
+          <div class="nav-bottom__item">
+            <div class="nav-bottom__indicator"></div>
+            <div class="nav-bottom__icon"></div>
+            <span class="nav-bottom__label">Promo</span>
+          </div>
+        </div>
+        <div class="nav-bottom__home">
+          <div class="nav-bottom__home-bar"></div>
+        </div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>items</td><td>NavSection[]</td><td>Sections: Home, Tipster, Biglietto, MyBets, Promo, etc.</td></tr>
+      <tr><td>activeSection</td><td>NavSection</td><td>Currently active section</td></tr>
+      <tr><td>badges</td><td>Record&lt;NavSection, number&gt;</td><td>Badge counts per section</td></tr>
+      <tr><td>showHomeIndicator</td><td>boolean</td><td>Show iOS home indicator bar</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- NavigationTab -->
+<section class="comp-section" id="NavigationTab">
+  <h3 class="comp-section__title">NavigationTab</h3>
+  <div class="comp-section__import">import { <code>NavigationTab</code> } from '@/components/NavigationTab'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--dark" style="padding:0">
+      <div style="display:flex;width:360px;background:var(--sisal-dark-alt);overflow:hidden;border-radius:0">
+        <div style="flex:1;text-align:center;padding:10px 0;font-size:12px;font-weight:700;color:var(--sisal-green);border-bottom:2px solid var(--sisal-green)">Scommesse</div>
+        <div style="flex:1;text-align:center;padding:10px 0;font-size:12px;color:white;border-bottom:2px solid transparent">Casino</div>
+        <div style="flex:1;text-align:center;padding:10px 0;font-size:12px;color:white;border-bottom:2px solid transparent">Poker</div>
+        <div style="flex:1;text-align:center;padding:10px 0;font-size:12px;color:white;border-bottom:2px solid transparent">Fedelta</div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>tabs</td><td>string[]</td><td>Tab labels</td></tr>
+      <tr><td>activeTab</td><td>string</td><td>Currently active tab</td></tr>
+      <tr><td>darkBg</td><td>boolean</td><td>Dark background variant</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- NavigationTop -->
+<section class="comp-section" id="NavigationTop">
+  <h3 class="comp-section__title">NavigationTop</h3>
+  <div class="comp-section__import">import { <code>NavigationTop</code> } from '@/components/NavigationTop'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="padding:0">
+      <div class="nav-top">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="nav-top__title">Page Title</div>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="1.5" fill="white"/><circle cx="12" cy="12" r="1.5" fill="white"/><circle cx="12" cy="18" r="1.5" fill="white"/></svg>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>title</td><td>string</td><td>Navigation title</td></tr>
+      <tr><td>showBack</td><td>boolean</td><td>Show back arrow</td></tr>
+      <tr><td>showMenu</td><td>boolean</td><td>Show menu icon</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- NavigationPanel -->
+<section class="comp-section" id="NavigationPanel">
+  <h3 class="comp-section__title">NavigationPanel</h3>
+  <div class="comp-section__import">import { <code>NavigationPanel</code> } from '@/components/NavigationPanel'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--dark" style="padding:0">
+      <div style="width:360px;background:var(--sisal-dark);padding:16px">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #3a474e">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.1)"></div>
+          <span style="color:white;font-size:14px;font-weight:500;flex:1">Impostazioni</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#929597" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #3a474e">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.1)"></div>
+          <span style="color:white;font-size:14px;font-weight:500;flex:1">Il mio profilo</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#929597" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0">
+          <div style="width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.1)"></div>
+          <span style="color:white;font-size:14px;font-weight:500;flex:1">Assistenza</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#929597" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>items</td><td>PanelItem[]</td><td>Navigation items with icon, label, action</td></tr>
+      <tr><td>onItemClick</td><td>(id) => void</td><td>Item click handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- TabBar -->
+<section class="comp-section" id="TabBar">
+  <h3 class="comp-section__title">TabBar</h3>
+  <div class="comp-section__import">import { <code>TabBar</code> } from '@/components/TabBar'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col" style="padding:0">
+      <div class="tabbar">
+        <button class="tabbar__item tabbar__item--active">Tutti</button>
+        <button class="tabbar__item">In corso</button>
+        <button class="tabbar__item">Chiuse</button>
+        <button class="tabbar__item">Vincite</button>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>tabs</td><td>string[]</td><td>Tab labels</td></tr>
+      <tr><td>activeIndex</td><td>number</td><td>Active tab index</td></tr>
+      <tr><td>onChange</td><td>(index) => void</td><td>Tab change handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- PageControl -->
+<section class="comp-section" id="PageControl">
+  <h3 class="comp-section__title">PageControl</h3>
+  <div class="comp-section__import">import { <code>PageControl</code> } from '@/components/PageControl'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div class="page-control">
+        <div class="page-control__dot page-control__dot--active"></div>
+        <div class="page-control__dot"></div>
+        <div class="page-control__dot"></div>
+        <div class="page-control__dot"></div>
+        <div class="page-control__dot"></div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>count</td><td>number</td><td>Total pages</td></tr>
+      <tr><td>active</td><td>number</td><td>Current page index</td></tr>
+    </table>
+  </div>
+</section>
+
+
+<!-- ============================
+     ACTIONS
+     ============================ -->
+<div class="category-divider">
+  <h2>Actions</h2>
+  <p>Interactive elements for user actions</p>
+</div>
+
+<!-- Button -->
+<section class="comp-section" id="Button">
+  <h3 class="comp-section__title">Button</h3>
+  <div class="comp-section__import">import { <code>Button</code>, <code>ButtonCombo</code> } from '@/components/Button'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="flex-wrap:wrap;gap:8px">
+      <button class="btn btn--default">Default</button>
+      <button class="btn btn--checkout">Checkout</button>
+      <button class="btn btn--delete">Delete</button>
+      <button class="btn btn--secondary">Secondary</button>
+      <button class="btn btn--ghost">Ghost</button>
+      <button class="btn btn--floating">
+        <span style="width:16px;height:16px;border-radius:50%;border:2px solid white;display:inline-block"></span>
+        Floating
+      </button>
+      <button class="btn btn--cashout">Cash Out</button>
+      <button class="btn btn--cashout-cashed">Cashed</button>
+      <button class="btn btn--cashout-acceptance">Acceptance</button>
+      <button class="btn btn--settings">Settings</button>
+      <button class="btn btn--default btn--disabled">Disabled</button>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>label</td><td>string</td><td>Button label text</td></tr>
+      <tr><td>variant</td><td>"default" | "checkout" | "delete" | "secondary" | "ghost" | "floating" | "cashout" | ...</td><td>Visual variant</td></tr>
+      <tr><td>disabled</td><td>boolean</td><td>Disabled state</td></tr>
+      <tr><td>onClick</td><td>() => void</td><td>Click handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- OddsSelection -->
+<section class="comp-section" id="OddsSelection">
+  <h3 class="comp-section__title">OddsSelection</h3>
+  <div class="comp-section__import">import { <code>OddsSelection</code>, <code>OddsSelectionRow</code> } from '@/components/OddsSelection'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <button class="odds odds--default"><span class="odds__result">1</span><span class="odds__quota">1.55</span></button>
+      <button class="odds odds--default"><span class="odds__result">X</span><span class="odds__quota">3.20</span></button>
+      <button class="odds odds--default"><span class="odds__result">2</span><span class="odds__quota">4.50</span></button>
+    </div>
+    <div class="comp-card__preview">
+      <button class="odds odds--selected"><span class="odds__result">1</span><span class="odds__quota">1.55</span></button>
+      <button class="odds odds--dark-selected"><span class="odds__result">X</span><span class="odds__quota">3.20</span></button>
+      <button class="odds odds--disabled"><span class="odds__lock">&#x1F512;</span></button>
+      <div style="position:relative">
+        <button class="odds odds--default"><span class="odds__result">2</span><span class="odds__quota">4.50</span></button>
+        <div style="position:absolute;top:0;right:0;width:0;height:0;border-left:8px solid transparent;border-top:8px solid #1a924b"></div>
+      </div>
+      <div style="position:relative">
+        <button class="odds odds--default"><span class="odds__result">1X</span><span class="odds__quota">1.20</span></button>
+        <div style="position:absolute;bottom:0;right:0;width:0;height:0;border-left:8px solid transparent;border-bottom:8px solid var(--sisal-red)"></div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>result</td><td>string</td><td>Result label (1, X, 2, etc.)</td></tr>
+      <tr><td>quota</td><td>string</td><td>Odds value</td></tr>
+      <tr><td>selected</td><td>boolean</td><td>Selected state (green bg)</td></tr>
+      <tr><td>locked</td><td>boolean</td><td>Show lock icon</td></tr>
+      <tr><td>oddsUp / oddsDown</td><td>boolean</td><td>Odds movement indicators</td></tr>
+      <tr><td>duo</td><td>boolean</td><td>Show DUO badge</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Filter -->
+<section class="comp-section" id="Filter">
+  <h3 class="comp-section__title">Filter</h3>
+  <div class="comp-section__import">import { <code>FilterChip</code>, <code>FilterButton</code>, <code>FilterChipsRow</code> } from '@/components/Filter'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <button class="filter-chip filter-chip--default">Calcio</button>
+      <button class="filter-chip filter-chip--default">Tennis</button>
+      <button class="filter-chip filter-chip--selected">Basket</button>
+      <button class="filter-chip filter-chip--default">Volley</button>
+    </div>
+    <div class="comp-card__preview comp-card__preview--dark">
+      <button class="filter-chip filter-chip--dark">Calcio</button>
+      <button class="filter-chip filter-chip--selected">Tennis</button>
+      <button class="filter-chip filter-chip--dark">Hockey</button>
+    </div>
+    <div class="comp-card__preview">
+      <button class="filter-floating">
+        <svg width="16" height="12" viewBox="0 0 20 16" fill="none"><path d="M2 2h16M2 8h12M2 14h8" stroke="#262c2f" stroke-width="2" stroke-linecap="round"/></svg>
+        Filtri
+      </button>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>label</td><td>string</td><td>Chip label</td></tr>
+      <tr><td>selected</td><td>boolean</td><td>Selected state</td></tr>
+      <tr><td>darkBg</td><td>boolean</td><td>Dark background variant</td></tr>
+      <tr><td>type</td><td>"Floating" | "List" | "Order" | "Default"</td><td>FilterButton type</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Searchbar -->
+<section class="comp-section" id="Searchbar">
+  <h3 class="comp-section__title">Searchbar</h3>
+  <div class="comp-section__import">import { <code>Searchbar</code> } from '@/components/Searchbar'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col">
+      <div class="searchbar">
+        <svg class="searchbar__icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="#929597" stroke-width="1.5"/><line x1="13.5" y1="13.5" x2="16.5" y2="16.5" stroke="#929597" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span>Cerca eventi, squadre e giocatori</span>
+      </div>
+      <div class="searchbar searchbar--active">
+        <svg class="searchbar__icon" width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="#262c2f" stroke-width="1.5"/><line x1="13.5" y1="13.5" x2="16.5" y2="16.5" stroke="#262c2f" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span style="color:var(--sisal-dark);flex:1">Inter Milan</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 6l8 8M14 6l-8 8" stroke="#929597" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>placeholder</td><td>string</td><td>Placeholder text</td></tr>
+      <tr><td>value</td><td>string</td><td>Controlled input value</td></tr>
+      <tr><td>onChange</td><td>(value) => void</td><td>Change handler</td></tr>
+      <tr><td>onClear</td><td>() => void</td><td>Clear button handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Link -->
+<section class="comp-section" id="Link">
+  <h3 class="comp-section__title">Link</h3>
+  <div class="comp-section__import">import { <code>Link</code> } from '@/components/Link'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <a class="link-demo">Scopri di piu</a>
+      <a class="link-demo" style="color:var(--sisal-text-alt)">Link secondario</a>
+      <a class="link-demo" style="color:var(--sisal-orange)">Link promo</a>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>label</td><td>string</td><td>Link text</td></tr>
+      <tr><td>href</td><td>string</td><td>Link URL</td></tr>
+      <tr><td>variant</td><td>"default" | "alt" | "promo"</td><td>Color variant</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Quicklink -->
+<section class="comp-section" id="Quicklink">
+  <h3 class="comp-section__title">Quicklink</h3>
+  <div class="comp-section__import">import { <code>Quicklink</code> } from '@/components/Quicklink'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div class="quicklink"><div class="quicklink__icon">&#9917;</div><span class="quicklink__label">Calcio</span></div>
+      <div class="quicklink"><div class="quicklink__icon">&#127934;</div><span class="quicklink__label">Tennis</span></div>
+      <div class="quicklink"><div class="quicklink__icon">&#127936;</div><span class="quicklink__label">Basket</span></div>
+      <div class="quicklink"><div class="quicklink__icon">&#127952;</div><span class="quicklink__label">F1</span></div>
+      <div class="quicklink"><div class="quicklink__icon">&#9918;</div><span class="quicklink__label">Volley</span></div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>icon</td><td>ReactNode</td><td>Icon element</td></tr>
+      <tr><td>label</td><td>string</td><td>Quicklink label</td></tr>
+      <tr><td>onClick</td><td>() => void</td><td>Click handler</td></tr>
+    </table>
+  </div>
+</section>
+
+
+<!-- ============================
+     FORMS
+     ============================ -->
+<div class="category-divider">
+  <h2>Forms</h2>
+  <p>Input controls and form elements</p>
+</div>
+
+<!-- TextField -->
+<section class="comp-section" id="TextField">
+  <h3 class="comp-section__title">TextField</h3>
+  <div class="comp-section__import">import { <code>TextField</code>, <code>TextFieldSai</code> } from '@/components/TextField'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col" style="gap:16px">
+      <div class="textfield">
+        <div class="textfield__label" style="color:transparent">Label</div>
+        <input class="textfield__input" placeholder="Label" readonly>
+        <div class="textfield__helper">Assistive text</div>
+      </div>
+      <div class="textfield">
+        <div class="textfield__label" style="color:var(--sisal-dark)">Email</div>
+        <input class="textfield__input" value="user@example.com" readonly>
+        <div class="textfield__helper">Enter your email</div>
+      </div>
+      <div class="textfield">
+        <div class="textfield__label" style="color:var(--sisal-red)">Password</div>
+        <input class="textfield__input textfield__input--error" value="abc" readonly>
+        <div class="textfield__helper textfield__helper--error">Password troppo corta</div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>label</td><td>string</td><td>Input label</td></tr>
+      <tr><td>value</td><td>string</td><td>Input value</td></tr>
+      <tr><td>error</td><td>boolean</td><td>Error state</td></tr>
+      <tr><td>errorMessage</td><td>string</td><td>Error message text</td></tr>
+      <tr><td>assistiveText</td><td>string</td><td>Helper text below input</td></tr>
+      <tr><td>disabled</td><td>boolean</td><td>Disabled state</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Dropdown -->
+<section class="comp-section" id="Dropdown">
+  <h3 class="comp-section__title">Dropdown</h3>
+  <div class="comp-section__import">import { <code>Dropdown</code>, <code>DropdownBetRadar</code> } from '@/components/Dropdown'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div class="dropdown-demo">
+        <span style="flex:1">Risultato</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" fill="#262c2f"/></svg>
+      </div>
+      <div class="dropdown-demo dropdown-demo--dark" style="background:var(--sisal-dark-alt);color:white">
+        <span style="flex:1">Mercato</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" fill="white"/></svg>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>options</td><td>DropdownOption[]</td><td>Dropdown options</td></tr>
+      <tr><td>value</td><td>string</td><td>Selected value</td></tr>
+      <tr><td>size</td><td>"s" | "m"</td><td>Size variant (36px / 52px)</td></tr>
+      <tr><td>bgDark</td><td>boolean</td><td>Dark background mode</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Toggle -->
+<section class="comp-section" id="Toggle">
+  <h3 class="comp-section__title">Toggle</h3>
+  <div class="comp-section__import">import { <code>Toggle</code>, <code>ToggleString</code> } from '@/components/Toggle'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div class="toggle toggle--on"><span class="toggle__thumb"></span></div>
+      <div class="toggle toggle--off"><span class="toggle__thumb"></span></div>
+      <div class="toggle toggle--sm toggle--on"><span class="toggle__thumb"></span></div>
+      <div class="toggle toggle--sm toggle--off"><span class="toggle__thumb"></span></div>
+      <div class="toggle toggle--on toggle--disabled"><span class="toggle__thumb"></span></div>
+    </div>
+    <div class="comp-card__preview" style="background:#fff6dc">
+      <div style="display:flex;align-items:center;gap:8px;width:100%;padding:4px 16px">
+        <span style="flex:1;font-size:12px;font-weight:700">Ricevi notifiche push</span>
+        <div class="toggle toggle--sm toggle--on"><span class="toggle__thumb"></span></div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>checked</td><td>boolean</td><td>Toggle state</td></tr>
+      <tr><td>size</td><td>"large" | "small"</td><td>Size variant</td></tr>
+      <tr><td>disabled</td><td>boolean</td><td>Disabled state</td></tr>
+      <tr><td>onChange</td><td>(checked) => void</td><td>Change handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Checkbox -->
+<section class="comp-section" id="Checkbox">
+  <h3 class="comp-section__title">Checkbox</h3>
+  <div class="comp-section__import">import { <code>Checkbox</code>, <code>RadioButton</code> } from '@/components/Checkbox'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="gap:16px">
+      <label class="checkbox-demo"><div class="checkbox-box"></div> Unchecked</label>
+      <label class="checkbox-demo"><div class="checkbox-box checkbox-box--checked"></div> Checked</label>
+      <label class="checkbox-demo" style="opacity:0.6"><div class="checkbox-box checkbox-box--disabled"></div> Disabled</label>
+      <label class="checkbox-demo" style="opacity:0.6"><div class="checkbox-box checkbox-box--disabled checkbox-box--checked"></div> Disabled checked</label>
+    </div>
+    <div class="comp-card__preview" style="gap:16px">
+      <label class="radio-demo"><div class="radio-circle"></div> Option A</label>
+      <label class="radio-demo"><div class="radio-circle radio-circle--checked"></div> Option B</label>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>checked</td><td>boolean</td><td>Checked state</td></tr>
+      <tr><td>disabled</td><td>boolean</td><td>Disabled state</td></tr>
+      <tr><td>label</td><td>string</td><td>Label text</td></tr>
+      <tr><td>onChange</td><td>(checked) => void</td><td>Change handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- SegmentedControls -->
+<section class="comp-section" id="SegmentedControls">
+  <h3 class="comp-section__title">SegmentedControls</h3>
+  <div class="comp-section__import">import { <code>SegmentedControls</code> } from '@/components/SegmentedControls'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div class="segmented">
+        <button class="segmented__item segmented__item--active">Singola</button>
+        <button class="segmented__item">Multipla</button>
+        <button class="segmented__item">Sistema</button>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>items</td><td>string[]</td><td>Segment labels</td></tr>
+      <tr><td>activeIndex</td><td>number</td><td>Active segment</td></tr>
+      <tr><td>onChange</td><td>(index) => void</td><td>Change handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Picker -->
+<section class="comp-section" id="Picker">
+  <h3 class="comp-section__title">Picker</h3>
+  <div class="comp-section__import">import { <code>Picker</code> } from '@/components/Picker'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div style="width:200px;height:120px;overflow:hidden;border-radius:8px;background:white;position:relative">
+        <div style="text-align:center;padding:8px;color:#ccc;font-size:14px">09:00</div>
+        <div style="text-align:center;padding:8px;font-size:16px;font-weight:700;background:var(--sisal-border-alt);border-radius:4px">10:00</div>
+        <div style="text-align:center;padding:8px;color:#ccc;font-size:14px">11:00</div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>items</td><td>string[]</td><td>Picker items</td></tr>
+      <tr><td>selectedIndex</td><td>number</td><td>Selected item index</td></tr>
+      <tr><td>onChange</td><td>(index) => void</td><td>Change handler</td></tr>
+    </table>
+  </div>
+</section>
+
+
+<!-- ============================
+     DATA DISPLAY
+     ============================ -->
+<div class="category-divider">
+  <h2>Data Display</h2>
+  <p>Components for displaying data and status information</p>
+</div>
+
+<!-- Badge -->
+<section class="comp-section" id="Badge">
+  <h3 class="comp-section__title">Badge</h3>
+  <div class="comp-section__import">import { <code>BadgeDefault</code>, <code>BadgeNotification</code>, <code>BadgeMarketNumber</code>, <code>BadgeSpecial</code>, <code>BadgeTipsterLevel</code>, <code>BadgeFantacalcio</code> } from '@/components/Badge'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="flex-wrap:wrap;gap:8px">
+      <span class="badge badge--s badge--live">Live</span>
+      <span class="badge badge--s badge--promo">Promo</span>
+      <span class="badge badge--s badge--info">Info</span>
+      <span class="badge badge--s badge--cashout">Cash Out</span>
+      <span class="badge badge--s badge--breaking">Breaking Bets</span>
+      <span class="badge badge--s badge--default">New</span>
+      <span class="badge badge--s badge--win">V</span>
+      <span class="badge badge--s badge--freebet">Freebet</span>
+    </div>
+    <div class="comp-card__preview" style="flex-wrap:wrap;gap:8px">
+      <span class="badge badge--m badge--live">Live</span>
+      <span class="badge badge--m badge--promo">Promo</span>
+      <span class="badge badge--m badge--cashout">Cash Out</span>
+    </div>
+    <div class="comp-card__preview" style="gap:12px">
+      <span class="badge-notif badge-notif--sm badge-notif--orange"></span>
+      <span class="badge-notif badge-notif--md badge-notif--orange">12</span>
+      <span class="badge-notif badge-notif--lg badge-notif--orange">100</span>
+      <span class="badge-notif badge-notif--md badge-notif--green">5</span>
+      <span class="badge-notif badge-notif--md badge-notif--dark">8</span>
+      <span class="badge-notif badge-notif--md badge-notif--muted">3</span>
+    </div>
+    <div class="comp-card__preview" style="gap:8px">
+      <span class="badge-market">+ 3490</span>
+      <span class="badge-market badge-market--selected">+ 3490</span>
+    </div>
+    <div class="comp-card__preview" style="gap:8px">
+      <div class="badge-special badge-special--breaking">
+        <div style="width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,0.15)"></div>
+        Breaking Bets
+      </div>
+      <div class="badge-special badge-special--increased">
+        <div style="width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.15)"></div>
+        Quota maggiorata
+      </div>
+    </div>
+    <div class="comp-card__preview" style="flex-wrap:wrap;gap:8px">
+      <span class="badge-tipster badge-tipster--sm" style="background:#8a939e">In riscaldamento</span>
+      <span class="badge-tipster badge-tipster--md" style="background:#009d9a">Esordiente</span>
+      <span class="badge-tipster badge-tipster--md" style="background:#016399">Promessa</span>
+      <span class="badge-tipster badge-tipster--md" style="background:#16155e">Professionista</span>
+      <span class="badge-tipster badge-tipster--lg" style="background:#722dad">Fuoriclasse</span>
+      <span class="badge-tipster badge-tipster--lg" style="background:#b8161c">Leggenda</span>
+    </div>
+    <div class="comp-card__preview" style="gap:8px">
+      <span class="badge-fanta" style="background:#67aaf9;color:var(--sisal-dark)">Ballottaggi</span>
+      <span class="badge-fanta" style="background:#e73947;color:white">Squalificati</span>
+      <span class="badge-fanta" style="background:#ff8e0d;color:var(--sisal-dark)">Indisponibili</span>
+      <span class="badge-fanta" style="background:#40cd8c;color:var(--sisal-dark)">In dubbio</span>
+      <span class="badge-fanta" style="background:#ffbf00;color:var(--sisal-dark)">Diffidati</span>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>size</td><td>"S" | "M"</td><td>Badge size</td></tr>
+      <tr><td>type</td><td>"Live" | "Promo" | "Info" | "Cashout" | "Breaking Bets" | ...</td><td>Badge variant</td></tr>
+      <tr><td>level</td><td>"In riscaldamento" | "Esordiente" | ... | "Leggenda"</td><td>Tipster level (BadgeTipsterLevel)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Label -->
+<section class="comp-section" id="Label">
+  <h3 class="comp-section__title">Label</h3>
+  <div class="comp-section__import">import { <code>Label</code> } from '@/components/Label'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="gap:8px;flex-wrap:wrap">
+      <span class="label-status label-status--win">Hai vinto 9.999,99&euro;</span>
+      <span class="label-status label-status--loser">Non hai vinto</span>
+      <span class="label-status label-status--pending">In corso</span>
+      <span class="label-status label-status--refund">Rimborsato</span>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>status</td><td>"Win" | "Loser" | "Pending" | "Refund"</td><td>Status variant</td></tr>
+      <tr><td>text</td><td>string</td><td>Custom label text</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Field -->
+<section class="comp-section" id="Field">
+  <h3 class="comp-section__title">Field</h3>
+  <div class="comp-section__import">import { <code>Field</code> } from '@/components/Field'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col">
+      <div style="display:flex;justify-content:space-between;width:280px;padding:8px 0;border-bottom:1px solid var(--sisal-border-alt)">
+        <span style="font-size:12px;color:var(--sisal-text-muted)">Importo scommessa</span>
+        <span style="font-size:12px;font-weight:700">10,00 &euro;</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;width:280px;padding:8px 0;border-bottom:1px solid var(--sisal-border-alt)">
+        <span style="font-size:12px;color:var(--sisal-text-muted)">Quota totale</span>
+        <span style="font-size:12px;font-weight:700">3.45</span>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>label</td><td>string</td><td>Field label</td></tr>
+      <tr><td>value</td><td>string</td><td>Field value</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Table -->
+<section class="comp-section" id="Table">
+  <h3 class="comp-section__title">Table</h3>
+  <div class="comp-section__import">import { <code>Table</code> } from '@/components/Table'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col">
+      <div style="width:328px;font-size:12px;border-radius:8px;overflow:hidden;border:1px solid var(--sisal-border-alt)">
+        <div style="display:flex;background:var(--sisal-surface);font-weight:700;padding:8px">
+          <span style="flex:2">Esito</span><span style="flex:1;text-align:right">Quota</span>
+        </div>
+        <div style="display:flex;padding:8px;border-top:1px solid var(--sisal-border-alt)">
+          <span style="flex:2">1X2 - 1</span><span style="flex:1;text-align:right;font-weight:700">1.55</span>
+        </div>
+        <div style="display:flex;padding:8px;border-top:1px solid var(--sisal-border-alt)">
+          <span style="flex:2">Under 2.5</span><span style="flex:1;text-align:right;font-weight:700">1.80</span>
+        </div>
+        <div style="display:flex;padding:8px;border-top:1px solid var(--sisal-border-alt)">
+          <span style="flex:2">GG</span><span style="flex:1;text-align:right;font-weight:700">2.10</span>
+        </div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>columns</td><td>Column[]</td><td>Table columns</td></tr>
+      <tr><td>rows</td><td>Row[]</td><td>Table data rows</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- TimeIndicator -->
+<section class="comp-section" id="TimeIndicator">
+  <h3 class="comp-section__title">TimeIndicator</h3>
+  <div class="comp-section__import">import { <code>TimeIndicator</code> } from '@/components/TimeIndicator'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="gap:16px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:48px;font-size:12px;text-align:center">
+        <span>01/01</span><span>18:00</span>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:48px;font-size:12px;text-align:center;color:var(--sisal-orange);font-weight:700">
+        <span>45'</span><span style="display:flex;gap:2px"><span>2</span><span>-</span><span>1</span></span>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>date</td><td>string</td><td>Date string (01/01)</td></tr>
+      <tr><td>time</td><td>string</td><td>Time string (18:00)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- BulletPoint -->
+<section class="comp-section" id="BulletPoint">
+  <h3 class="comp-section__title">BulletPoint</h3>
+  <div class="comp-section__import">import { <code>BulletPoint</code> } from '@/components/BulletPoint'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col" style="gap:8px">
+      <div style="display:flex;align-items:flex-start;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--sisal-green);margin-top:5px;flex-shrink:0"></div><span style="font-size:14px">Scommessa singola con importo minimo di 5&euro;</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--sisal-green);margin-top:5px;flex-shrink:0"></div><span style="font-size:14px">Quota minima 1.50 per evento</span></div>
+      <div style="display:flex;align-items:flex-start;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--sisal-green);margin-top:5px;flex-shrink:0"></div><span style="font-size:14px">Valido per eventi di calcio Serie A</span></div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>items</td><td>string[]</td><td>Bullet point texts</td></tr>
+      <tr><td>bulletColor</td><td>string</td><td>Bullet dot color</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Skeleton -->
+<section class="comp-section" id="Skeleton">
+  <h3 class="comp-section__title">Skeleton</h3>
+  <div class="comp-section__import">import { <code>Skeleton</code> } from '@/components/Skeleton'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col" style="gap:8px">
+      <div class="skeleton" style="width:200px;height:14px"></div>
+      <div class="skeleton" style="width:280px;height:14px"></div>
+      <div class="skeleton" style="width:160px;height:14px"></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <div class="skeleton" style="width:36px;height:36px;border-radius:50%"></div>
+        <div style="display:flex;flex-direction:column;gap:6px;flex:1">
+          <div class="skeleton" style="width:100%;height:12px"></div>
+          <div class="skeleton" style="width:60%;height:12px"></div>
+        </div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>variant</td><td>"text" | "circle" | "card"</td><td>Skeleton shape</td></tr>
+      <tr><td>width</td><td>string</td><td>Width</td></tr>
+      <tr><td>height</td><td>string</td><td>Height</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Loader -->
+<section class="comp-section" id="Loader">
+  <h3 class="comp-section__title">Loader</h3>
+  <div class="comp-section__import">import { <code>Loader</code> } from '@/components/Loader'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="gap:16px">
+      <div class="loader" style="width:24px;height:24px;border-width:2px"></div>
+      <div class="loader"></div>
+      <div class="loader" style="width:48px;height:48px;border-width:4px"></div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>size</td><td>"s" | "m" | "l"</td><td>Loader size</td></tr>
+    </table>
+  </div>
+</section>
+
+
+<!-- ============================
+     CARDS
+     ============================ -->
+<div class="category-divider">
+  <h2>Cards</h2>
+  <p>Card components for displaying matches, events, and content</p>
+</div>
+
+<!-- CardButton -->
+<section class="comp-section" id="CardButton">
+  <h3 class="comp-section__title">CardButton</h3>
+  <div class="comp-section__import">import { <code>CardButton</code> } from '@/components/CardButton'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="gap:12px">
+      <div style="width:160px;height:80px;background:white;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--sisal-border-alt);display:flex;align-items:center;justify-content:center">&#9917;</div>
+        <span style="font-size:12px;font-weight:500">Scommesse</span>
+      </div>
+      <div style="width:160px;height:80px;background:white;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer">
+        <div style="width:32px;height:32px;border-radius:8px;background:var(--sisal-border-alt);display:flex;align-items:center;justify-content:center">&#127922;</div>
+        <span style="font-size:12px;font-weight:500">Bet Builder</span>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>icon</td><td>ReactNode</td><td>Card icon</td></tr>
+      <tr><td>label</td><td>string</td><td>Card label</td></tr>
+      <tr><td>onClick</td><td>() => void</td><td>Click handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- CardMatch -->
+<section class="comp-section" id="CardMatch">
+  <h3 class="comp-section__title">CardMatch</h3>
+  <div class="comp-section__import">import { <code>CardMatchExtended</code>, <code>CardMatchCompact</code> } from '@/components/CardMatch'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col" style="gap:16px">
+      <!-- Extended -->
+      <div class="card-demo" style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:4px">
+          <span style="font-size:12px;flex:1">Serie A - Giornata 22</span>
+          <span class="badge badge--s badge--promo">Promo</span>
+          <span class="badge-market">+ 120</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <div style="flex:1;text-align:center">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--sisal-border-alt);margin:0 auto"></div>
+            <div style="font-size:12px;font-weight:500;margin-top:4px">Inter</div>
+          </div>
+          <div style="text-align:center;width:48px;font-size:12px"><div>25/01</div><div>20:45</div></div>
+          <div style="flex:1;text-align:center">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--sisal-border-alt);margin:0 auto"></div>
+            <div style="font-size:12px;font-weight:500;margin-top:4px">Milan</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:10px;color:var(--sisal-text-alt)">1X2</div>
+        <div style="display:flex;gap:8px">
+          <button class="odds odds--selected" style="flex:1"><span class="odds__result">1</span><span class="odds__quota">1.55</span></button>
+          <button class="odds odds--default" style="flex:1"><span class="odds__result">X</span><span class="odds__quota">3.80</span></button>
+          <button class="odds odds--default" style="flex:1"><span class="odds__result">2</span><span class="odds__quota">5.20</span></button>
+        </div>
+      </div>
+      <!-- Compact -->
+      <div class="card-demo" style="display:flex;flex-direction:column;gap:8px;height:92px">
+        <div style="display:flex;align-items:center;gap:4px">
+          <span style="font-size:12px;flex:1">Serie A</span>
+          <span class="badge badge--s badge--live">Live</span>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:8px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:12px;font-weight:500">Juventus</span>
+            <span style="font-size:12px;font-weight:500">Napoli</span>
+            <span style="font-size:10px;color:var(--sisal-text)">12/10 - 15:05</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;color:var(--sisal-orange);font-size:12px;font-weight:500;text-align:right;width:20px">
+            <span>2</span><span>1</span>
+          </div>
+          <div style="display:flex;gap:4px">
+            <button class="odds odds--default" style="width:60px"><span class="odds__result">1</span><span class="odds__quota">2.10</span></button>
+            <button class="odds odds--default" style="width:60px"><span class="odds__result">X</span><span class="odds__quota">3.40</span></button>
+            <button class="odds odds--default" style="width:60px"><span class="odds__result">2</span><span class="odds__quota">2.90</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>team1 / team2</td><td>string</td><td>Team names</td></tr>
+      <tr><td>date / time</td><td>string</td><td>Match date and time</td></tr>
+      <tr><td>odds</td><td>OddsButtonProps[]</td><td>Odds buttons</td></tr>
+      <tr><td>promo / breakingBets</td><td>boolean</td><td>Show badge indicators</td></tr>
+      <tr><td>livescore</td><td>{ score1, score2 }</td><td>Live score (compact only)</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- CardEvent -->
+<section class="comp-section" id="CardEvent">
+  <h3 class="comp-section__title">CardEvent</h3>
+  <div class="comp-section__import">import { <code>CardEvent</code> } from '@/components/CardEvent'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div class="card-demo" style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;flex:1">Champions League</span><span class="badge badge--s badge--breaking">Breaking Bets</span></div>
+        <div style="font-size:14px;font-weight:500">Chi vincera la Champions?</div>
+        <div style="display:flex;gap:8px">
+          <button class="odds odds--default" style="flex:1"><span class="odds__result">Real Madrid</span><span class="odds__quota">3.50</span></button>
+          <button class="odds odds--default" style="flex:1"><span class="odds__result">Man City</span><span class="odds__quota">4.00</span></button>
+          <button class="odds odds--default" style="flex:1"><span class="odds__result">Bayern</span><span class="odds__quota">6.50</span></button>
+        </div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>title</td><td>string</td><td>Event title</td></tr>
+      <tr><td>competition</td><td>string</td><td>Competition name</td></tr>
+      <tr><td>odds</td><td>OddsButtonProps[]</td><td>Odds selections</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- CardAntepost / CardBetBuilder / CardAlarm / etc. - simplified entries -->
+<section class="comp-section" id="CardAntepost">
+  <h3 class="comp-section__title">CardAntepost</h3>
+  <div class="comp-section__import">import { <code>CardAntepost</code> } from '@/components/CardAntepost'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="display:flex;flex-direction:column;gap:8px"><div style="font-size:12px;color:var(--sisal-text-alt)">Serie A - Vincente campionato</div><div style="display:flex;gap:8px"><button class="odds odds--default" style="flex:1"><span class="odds__result">Inter</span><span class="odds__quota">1.80</span></button><button class="odds odds--default" style="flex:1"><span class="odds__result">Napoli</span><span class="odds__quota">3.50</span></button><button class="odds odds--default" style="flex:1"><span class="odds__result">Juventus</span><span class="odds__quota">6.00</span></button></div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>title</td><td>string</td><td>Antepost title</td></tr><tr><td>odds</td><td>OddsButtonProps[]</td><td>Odds list</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardBetBuilder">
+  <h3 class="comp-section__title">CardBetBuilder</h3>
+  <div class="comp-section__import">import { <code>CardBetBuilder</code> } from '@/components/CardBetBuilder'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="background:linear-gradient(135deg,var(--sisal-dark) 0%,var(--sisal-dark-alt) 100%);color:white;display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center;gap:4px"><span style="font-size:12px;flex:1;opacity:0.7">Bet Builder</span><span class="badge badge--s badge--default">New</span></div><div style="font-size:14px;font-weight:700">Inter - Milan</div><div style="font-size:12px;opacity:0.7">Combina i tuoi esiti preferiti</div><button class="btn btn--default btn--sm" style="align-self:flex-start;margin-top:4px">Crea la tua scommessa</button></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>team1 / team2</td><td>string</td><td>Teams</td></tr><tr><td>subtitle</td><td>string</td><td>Description text</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardAlarm">
+  <h3 class="comp-section__title">CardAlarm</h3>
+  <div class="comp-section__import">import { <code>CardAlarm</code> } from '@/components/CardAlarm'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="display:flex;align-items:center;gap:8px"><div style="width:40px;height:40px;border-radius:8px;background:var(--sisal-border-alt);display:flex;align-items:center;justify-content:center;font-size:18px">&#128276;</div><div style="flex:1"><div style="font-size:14px;font-weight:500">Inter - Milan</div><div style="font-size:12px;color:var(--sisal-text-muted)">25/01 - 20:45</div></div><div class="toggle toggle--sm toggle--on"><span class="toggle__thumb"></span></div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>matchTitle</td><td>string</td><td>Match title</td></tr><tr><td>dateTime</td><td>string</td><td>Date and time</td></tr><tr><td>active</td><td>boolean</td><td>Alarm toggle state</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardCartDetails">
+  <h3 class="comp-section__title">CardCartDetails</h3>
+  <div class="comp-section__import">import { <code>CardCartDetails</code> } from '@/components/CardCartDetails'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--sisal-text-muted)">1X2 - 1</span><span style="font-weight:700">1.55</span></div><div style="font-size:14px;font-weight:500">Inter - Milan</div><div style="font-size:12px;color:var(--sisal-text-muted)">Serie A - 25/01 20:45</div><div style="display:flex;justify-content:flex-end"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="var(--sisal-red)" stroke-width="2" stroke-linecap="round"/></svg></div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>market</td><td>string</td><td>Market label</td></tr><tr><td>selection</td><td>string</td><td>Selected outcome</td></tr><tr><td>odds</td><td>string</td><td>Odds value</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardMyBets">
+  <h3 class="comp-section__title">CardMyBets</h3>
+  <div class="comp-section__import">import { <code>CardMyBets</code> } from '@/components/CardMyBets'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center;gap:4px"><span class="label-status label-status--pending">In corso</span><span style="flex:1"></span><span style="font-size:10px;color:var(--sisal-text-muted)">#12345678</span></div><div style="font-size:14px;font-weight:500">Multipla 3 esiti</div><div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--sisal-text-muted)">Puntata: 10,00 &euro;</span><span style="font-weight:700">Vincita pot.: 34,50 &euro;</span></div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>status</td><td>"Win" | "Loser" | "Pending"</td><td>Bet status</td></tr><tr><td>betType</td><td>string</td><td>Bet type label</td></tr><tr><td>stake / potentialWin</td><td>string</td><td>Monetary values</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardMyBetsTicket">
+  <h3 class="comp-section__title">CardMyBetsTicket</h3>
+  <div class="comp-section__import">import { <code>CardMyBetsTicket</code> } from '@/components/CardMyBetsTicket'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">CardMyBetsTicket - Full ticket detail view with all selections, stake details, and cash out option</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>ticket</td><td>TicketData</td><td>Full ticket data</td></tr><tr><td>showCashout</td><td>boolean</td><td>Show cash out button</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardTip">
+  <h3 class="comp-section__title">CardTip</h3>
+  <div class="comp-section__import">import { <code>CardTip</code> } from '@/components/CardTip'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:center;gap:8px"><div style="width:32px;height:32px;border-radius:50%;background:var(--sisal-border-alt)"></div><div><div style="font-size:12px;font-weight:700">TipsterPro</div><span class="badge-tipster badge-tipster--sm" style="background:#016399">Promessa</span></div></div><div style="font-size:14px;font-weight:500">Multipla Serie A</div><div style="font-size:12px;color:var(--sisal-text-muted)">3 esiti - Quota: 4.50</div><div style="display:flex;gap:4px"><span class="badge badge--s badge--default">Calcio</span><span class="badge badge--s badge--promo">Promo</span></div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>tipster</td><td>TipsterData</td><td>Tipster info</td></tr><tr><td>title</td><td>string</td><td>Tip title</td></tr><tr><td>odds</td><td>string</td><td>Total odds</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardPlayer">
+  <h3 class="comp-section__title">CardPlayer</h3>
+  <div class="comp-section__import">import { <code>CardPlayer</code> } from '@/components/CardPlayer'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div style="width:120px;background:white;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);padding:8px;text-align:center"><div style="width:48px;height:48px;border-radius:50%;background:var(--sisal-border-alt);margin:0 auto"></div><div style="font-size:12px;font-weight:700;margin-top:6px">L. Martinez</div><div style="font-size:10px;color:var(--sisal-text-muted)">Attaccante</div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>name</td><td>string</td><td>Player name</td></tr><tr><td>role</td><td>string</td><td>Player role</td></tr><tr><td>avatar</td><td>ReactNode</td><td>Player photo</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardFreebet">
+  <h3 class="comp-section__title">CardFreebet</h3>
+  <div class="comp-section__import">import { <code>CardFreebet</code> } from '@/components/CardFreebet'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="background:linear-gradient(135deg,#ffbf00 0%,#ff8e0d 100%);color:var(--sisal-dark)"><div style="font-size:10px;font-weight:700;text-transform:uppercase">Freebet</div><div style="font-size:20px;font-weight:700;margin:4px 0">5,00 &euro;</div><div style="font-size:12px">Scade il 31/01/2026</div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>amount</td><td>string</td><td>Freebet amount</td></tr><tr><td>expiry</td><td>string</td><td>Expiry date</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardQuizbet">
+  <h3 class="comp-section__title">CardQuizbet</h3>
+  <div class="comp-section__import">import { <code>CardQuizbet</code> } from '@/components/CardQuizbet'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="background:var(--sisal-dark);color:white"><div style="font-size:10px;text-transform:uppercase;color:var(--sisal-green);font-weight:700">Quiz Bet</div><div style="font-size:14px;font-weight:500;margin:6px 0">Quanti gol segna l'Inter?</div><div style="display:flex;gap:6px"><button class="btn btn--sm" style="background:rgba(255,255,255,0.1);color:white;border:none;flex:1">0-1</button><button class="btn btn--sm" style="background:rgba(255,255,255,0.1);color:white;border:none;flex:1">2-3</button><button class="btn btn--sm" style="background:var(--sisal-green);color:var(--sisal-dark);border:none;flex:1">4+</button></div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>question</td><td>string</td><td>Quiz question</td></tr><tr><td>options</td><td>string[]</td><td>Answer options</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardRacommended">
+  <h3 class="comp-section__title">CardRacommended</h3>
+  <div class="comp-section__import">import { <code>CardRacommended</code> } from '@/components/CardRacommended'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="display:flex;flex-direction:column;gap:6px"><div style="font-size:10px;font-weight:700;color:var(--sisal-green);text-transform:uppercase">Consigliata</div><div style="font-size:14px;font-weight:500">Inter vince + Over 2.5</div><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:var(--sisal-text-muted)">Multipla 2 esiti</span><span style="font-size:16px;font-weight:700;color:var(--sisal-green-dark)">3.20</span></div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>title</td><td>string</td><td>Recommendation title</td></tr><tr><td>totalOdds</td><td>string</td><td>Combined odds</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardTabellone">
+  <h3 class="comp-section__title">CardTabellone</h3>
+  <div class="comp-section__import">import { <code>CardTabellone</code> } from '@/components/CardTabellone'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">CardTabellone - Full match tabellone with multiple market rows and odds grid</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>match</td><td>MatchData</td><td>Match information</td></tr><tr><td>markets</td><td>Market[]</td><td>Available markets</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardFeedback">
+  <h3 class="comp-section__title">CardFeedback</h3>
+  <div class="comp-section__import">import { <code>CardFeedback</code> } from '@/components/CardFeedback'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px"><div style="font-size:24px">&#11088;&#11088;&#11088;&#11088;&#9734;</div><div style="font-size:14px;font-weight:500">Come valuti l'esperienza?</div><button class="btn btn--default btn--sm">Invia</button></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>rating</td><td>number</td><td>Star rating (1-5)</td></tr><tr><td>title</td><td>string</td><td>Feedback question</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardBreakingBets">
+  <h3 class="comp-section__title">CardBreakingBets</h3>
+  <div class="comp-section__import">import { <code>CardBreakingBets</code> } from '@/components/CardBreakingBets'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="background:var(--sisal-orange);color:var(--sisal-dark);display:flex;flex-direction:column;gap:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase">Breaking Bets</div><div style="font-size:14px;font-weight:700">Quote speciali del giorno</div><div style="font-size:12px">Scopri le offerte esclusive</div></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>title</td><td>string</td><td>Card title</td></tr><tr><td>subtitle</td><td>string</td><td>Card description</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="CardBetFun">
+  <h3 class="comp-section__title">CardBetFun</h3>
+  <div class="comp-section__import">import { <code>CardBetFun</code> } from '@/components/CardBetFun'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="card-demo" style="background:linear-gradient(135deg,var(--sisal-purple) 0%,#5a1fa0 100%);color:white;display:flex;flex-direction:column;gap:8px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--sisal-yellow)">Bet Fun</div><div style="font-size:14px;font-weight:700">Gioca gratis e vinci premi</div><button class="btn btn--sm" style="background:var(--sisal-yellow);color:var(--sisal-dark);border:none;align-self:flex-start">Gioca ora</button></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>title</td><td>string</td><td>Card title</td></tr><tr><td>ctaLabel</td><td>string</td><td>CTA button text</td></tr></table>
+  </div>
+</section>
+
+
+<!-- ============================
+     PANELS
+     ============================ -->
+<div class="category-divider">
+  <h2>Panels</h2>
+  <p>Bottom sheet panels and overlay content</p>
+</div>
+
+<section class="comp-section" id="PanelCart">
+  <h3 class="comp-section__title">PanelCart</h3>
+  <div class="comp-section__import">import { <code>PanelCart</code> } from '@/components/PanelCart'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">PanelCart - Bottom sheet with cart items, stake input, potential win, and checkout button</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>items</td><td>CartItem[]</td><td>Cart selections</td></tr><tr><td>totalOdds</td><td>string</td><td>Total odds</td></tr><tr><td>onCheckout</td><td>() => void</td><td>Checkout handler</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="PanelFilter">
+  <h3 class="comp-section__title">PanelFilter</h3>
+  <div class="comp-section__import">import { <code>PanelFilter</code> } from '@/components/PanelFilter'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">PanelFilter - Filter panel with sport/competition checkboxes and apply/reset actions</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>filters</td><td>FilterGroup[]</td><td>Filter categories</td></tr><tr><td>onApply</td><td>() => void</td><td>Apply handler</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="PanelLink">
+  <h3 class="comp-section__title">PanelLink</h3>
+  <div class="comp-section__import">import { <code>PanelLink</code> } from '@/components/PanelLink'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div style="width:328px;background:white;border-radius:12px 12px 0 0;box-shadow:0 -2px 8px rgba(0,0,0,0.1);padding:16px;display:flex;flex-direction:column;gap:12px"><div style="width:40px;height:4px;border-radius:2px;background:var(--sisal-border);align-self:center"></div><a style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--sisal-dark);text-decoration:none;padding:8px 0;border-bottom:1px solid var(--sisal-border-alt)"><span style="flex:1">Condividi</span><svg width="16" height="16" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="#929597" stroke-width="2" fill="none" stroke-linecap="round"/></svg></a><a style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--sisal-dark);text-decoration:none;padding:8px 0"><span style="flex:1">Dettagli evento</span><svg width="16" height="16" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="#929597" stroke-width="2" fill="none" stroke-linecap="round"/></svg></a></div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>links</td><td>LinkItem[]</td><td>Link items</td></tr><tr><td>onClose</td><td>() => void</td><td>Close handler</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="PanelLongPress">
+  <h3 class="comp-section__title">PanelLongPress</h3>
+  <div class="comp-section__import">import { <code>PanelLongPress</code> } from '@/components/PanelLongPress'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">PanelLongPress - Context menu panel triggered by long press on odds/match</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>actions</td><td>Action[]</td><td>Available actions</td></tr><tr><td>matchInfo</td><td>MatchData</td><td>Context match data</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="PanelOddsSelection">
+  <h3 class="comp-section__title">PanelOddsSelection</h3>
+  <div class="comp-section__import">import { <code>PanelOddsSelection</code> } from '@/components/PanelOddsSelection'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">PanelOddsSelection - Panel showing detailed market odds with all available selections</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>market</td><td>string</td><td>Market name</td></tr><tr><td>odds</td><td>OddsItem[]</td><td>All available odds</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="PanelPrediction">
+  <h3 class="comp-section__title">PanelPrediction</h3>
+  <div class="comp-section__import">import { <code>PanelPrediction</code> } from '@/components/PanelPrediction'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">PanelPrediction - AI prediction panel with match analysis and suggested bets</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>prediction</td><td>PredictionData</td><td>Prediction data</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="PanelSettings">
+  <h3 class="comp-section__title">PanelSettings</h3>
+  <div class="comp-section__import">import { <code>PanelSettings</code> } from '@/components/PanelSettings'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">PanelSettings - Settings panel with toggle options, dropdowns, and preferences</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>settings</td><td>SettingItem[]</td><td>Settings list</td></tr><tr><td>onSave</td><td>() => void</td><td>Save handler</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="PanelSport">
+  <h3 class="comp-section__title">PanelSport</h3>
+  <div class="comp-section__import">import { <code>PanelSport</code> } from '@/components/PanelSport'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">PanelSport - Sport selection panel with icon grid of available sports</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>sports</td><td>Sport[]</td><td>Sports list</td></tr><tr><td>onSelect</td><td>(sport) => void</td><td>Selection handler</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="PanelText">
+  <h3 class="comp-section__title">PanelText</h3>
+  <div class="comp-section__import">import { <code>PanelText</code> } from '@/components/PanelText'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">PanelText - Informational text panel for terms, rules, and explanations</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>title</td><td>string</td><td>Panel title</td></tr><tr><td>body</td><td>string</td><td>Body text</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="PanelTipDetail">
+  <h3 class="comp-section__title">PanelTipDetail</h3>
+  <div class="comp-section__import">import { <code>PanelTipDetail</code> } from '@/components/PanelTipDetail'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">PanelTipDetail - Detailed tipster tip view with full analysis and selections</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>tip</td><td>TipData</td><td>Full tip details</td></tr><tr><td>tipster</td><td>TipsterData</td><td>Tipster info</td></tr></table>
+  </div>
+</section>
+
+
+<!-- ============================
+     FEEDBACK
+     ============================ -->
+<div class="category-divider">
+  <h2>Feedback</h2>
+  <p>User feedback, alerts, and messaging components</p>
+</div>
+
+<!-- Snackbar -->
+<section class="comp-section" id="Snackbar">
+  <h3 class="comp-section__title">Snackbar</h3>
+  <div class="comp-section__import">import { <code>Snackbar</code> } from '@/components/Snackbar'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col" style="gap:12px">
+      <div class="snackbar snackbar--error">
+        <span class="snackbar__icon" style="color:var(--sisal-red)">&otimes;</span>
+        <div class="snackbar__content"><div class="snackbar__title">Errore</div><div class="snackbar__subtitle">Qualcosa e andato storto</div></div>
+        <span class="snackbar__link">Link</span>
+      </div>
+      <div class="snackbar snackbar--warning">
+        <span class="snackbar__icon" style="color:var(--sisal-yellow)">&#9888;</span>
+        <div class="snackbar__content"><div class="snackbar__title">Attenzione</div><div class="snackbar__subtitle">La quota potrebbe variare</div></div>
+        <span class="snackbar__link">Link</span>
+      </div>
+      <div class="snackbar snackbar--info">
+        <span class="snackbar__icon" style="color:var(--sisal-blue-dark)">&#9432;</span>
+        <div class="snackbar__content"><div class="snackbar__title">Informazione</div><div class="snackbar__subtitle">Nuovo mercato disponibile</div></div>
+        <span class="snackbar__link">Link</span>
+      </div>
+      <div class="snackbar snackbar--success">
+        <span class="snackbar__icon" style="color:var(--sisal-green-dark)">&#10003;</span>
+        <div class="snackbar__content"><div class="snackbar__title">Successo</div><div class="snackbar__subtitle">Scommessa piazzata</div></div>
+        <span class="snackbar__link">Link</span>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>type</td><td>"Error" | "Warning" | "Informative" | "Success"</td><td>Snackbar variant</td></tr>
+      <tr><td>title</td><td>string</td><td>Title text</td></tr>
+      <tr><td>subtitle</td><td>string</td><td>Description text</td></tr>
+      <tr><td>showLink</td><td>boolean</td><td>Show action link</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- InlineMessage -->
+<section class="comp-section" id="InlineMessage">
+  <h3 class="comp-section__title">InlineMessage</h3>
+  <div class="comp-section__import">import { <code>InlineMessage</code> } from '@/components/InlineMessage'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col" style="gap:8px">
+      <div class="inline-msg inline-msg--info">
+        <span style="font-size:16px">&#9432;</span>
+        <span style="font-size:14px">Questa funzione e disponibile solo per utenti verificati.</span>
+      </div>
+      <div class="inline-msg inline-msg--warning">
+        <span style="font-size:16px">&#9888;</span>
+        <span style="font-size:14px">Le quote potrebbero variare prima della conferma.</span>
+      </div>
+      <div class="inline-msg inline-msg--error">
+        <span style="font-size:16px">&otimes;</span>
+        <span style="font-size:14px">Importo non valido. Min 1,00 &euro;.</span>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>type</td><td>"info" | "warning" | "error" | "success"</td><td>Message variant</td></tr>
+      <tr><td>message</td><td>string</td><td>Message text</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Feedback -->
+<section class="comp-section" id="Feedback">
+  <h3 class="comp-section__title">Feedback</h3>
+  <div class="comp-section__import">import { <code>Feedback</code> } from '@/components/Feedback'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">Feedback - Full-screen feedback state (success, error, empty state) with icon, title, description, and CTA</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>type</td><td>"success" | "error" | "empty"</td><td>Feedback type</td></tr><tr><td>title</td><td>string</td><td>Title text</td></tr><tr><td>description</td><td>string</td><td>Description text</td></tr></table>
+  </div>
+</section>
+
+<!-- Banner -->
+<section class="comp-section" id="Banner">
+  <h3 class="comp-section__title">Banner</h3>
+  <div class="comp-section__import">import { <code>Banner</code> } from '@/components/Banner'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col" style="gap:12px">
+      <div class="banner-demo banner-demo--promo">
+        <div style="font-size:24px">&#127873;</div>
+        <div><div style="font-weight:700;font-size:14px">Bonus Benvenuto</div><div style="font-size:12px;margin-top:2px">Fino a 200&euro; in freebet</div></div>
+      </div>
+      <div class="banner-demo banner-demo--info">
+        <div style="font-size:24px">&#128227;</div>
+        <div><div style="font-weight:700;font-size:14px">Novita!</div><div style="font-size:12px;margin-top:2px">Scopri il nuovo Bet Builder</div></div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>variant</td><td>"promo" | "info" | "warning"</td><td>Banner style</td></tr>
+      <tr><td>title</td><td>string</td><td>Banner title</td></tr>
+      <tr><td>subtitle</td><td>string</td><td>Banner subtitle</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Tooltip -->
+<section class="comp-section" id="Tooltip">
+  <h3 class="comp-section__title">Tooltip</h3>
+  <div class="comp-section__import">import { <code>Tooltip</code> } from '@/components/Tooltip'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="gap:24px">
+      <div class="tooltip-demo">
+        <div class="tooltip-demo__card">
+          <div style="display:flex;align-items:center;margin-bottom:4px">
+            <span style="flex:1;font-family:Mulish,sans-serif;font-weight:700;font-size:14px">Quota maggiorata</span>
+            <span style="font-size:12px;color:var(--sisal-text-muted)">1 di 3</span>
+          </div>
+          <p style="font-size:14px;color:var(--sisal-text-alt);margin-bottom:6px">Le quote maggiorate offrono un valore superiore su esiti selezionati.</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;height:26px">
+            <span style="font-size:12px;font-weight:500;cursor:pointer">Esci</span>
+            <div style="display:flex;gap:8px">
+              <button style="height:26px;width:64px;border-radius:100px;border:1px solid var(--sisal-dark);font-size:12px;font-weight:500;background:none;cursor:pointer">Indietro</button>
+              <button style="height:26px;width:64px;border-radius:100px;border:none;font-size:12px;font-weight:500;background:var(--sisal-green-link);color:white;cursor:pointer">Avanti</button>
+            </div>
+          </div>
+        </div>
+        <div class="tooltip-demo__arrow"></div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>title</td><td>string</td><td>Tooltip title</td></tr>
+      <tr><td>subtitle</td><td>string</td><td>Tooltip body text</td></tr>
+      <tr><td>currentStep / totalSteps</td><td>number</td><td>Step indicator</td></tr>
+      <tr><td>arrowDirection</td><td>"up" | "down"</td><td>Arrow position</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Modal -->
+<section class="comp-section" id="Modal">
+  <h3 class="comp-section__title">Modal</h3>
+  <div class="comp-section__import">import { <code>Modal</code> } from '@/components/Modal'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div class="modal-demo">
+        <div class="modal-demo__nav">
+          <div class="modal-demo__nav-title">Regolamento</div>
+          <button style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:20px;cursor:pointer;padding:8px">&times;</button>
+        </div>
+        <div class="modal-demo__content">
+          <div style="border-bottom:1px solid #3a474e;padding-bottom:12px;margin-bottom:12px">
+            <h4 style="font-family:Mulish,sans-serif;font-weight:700;margin-bottom:4px">Come funziona</h4>
+            <p style="font-size:14px;color:rgba(255,255,255,0.7)">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </div>
+          <div>
+            <h4 style="font-family:Mulish,sans-serif;font-weight:700;margin-bottom:4px">Termini e condizioni</h4>
+            <p style="font-size:14px;color:rgba(255,255,255,0.7)">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>title</td><td>string</td><td>Modal title</td></tr>
+      <tr><td>sections</td><td>Section[]</td><td>Content sections</td></tr>
+      <tr><td>onClose</td><td>() => void</td><td>Close handler</td></tr>
+    </table>
+  </div>
+</section>
+
+
+<!-- ============================
+     CONTENT
+     ============================ -->
+<div class="category-divider">
+  <h2>Content</h2>
+  <p>Content display and rich media components</p>
+</div>
+
+<!-- TitleText -->
+<section class="comp-section" id="TitleText">
+  <h3 class="comp-section__title">TitleText</h3>
+  <div class="comp-section__import">import { <code>TitleText</code> } from '@/components/TitleText'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview comp-card__preview--col">
+      <div style="width:328px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <h3 style="font-family:Mulish,sans-serif;font-weight:700;font-size:16px">Top Match</h3>
+          <a style="font-size:12px;font-weight:500;color:var(--sisal-green-link);text-decoration:underline;cursor:pointer">Vedi tutti</a>
+        </div>
+        <p style="font-size:14px;color:var(--sisal-text-alt)">I match piu attesi della giornata</p>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>title</td><td>string</td><td>Section title</td></tr>
+      <tr><td>subtitle</td><td>string</td><td>Section subtitle</td></tr>
+      <tr><td>linkText</td><td>string</td><td>Optional link text</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Balloon -->
+<section class="comp-section" id="Balloon">
+  <h3 class="comp-section__title">Balloon</h3>
+  <div class="comp-section__import">import { <code>Balloon</code> } from '@/components/Balloon'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div style="background:var(--sisal-dark);color:white;padding:8px 12px;border-radius:8px;font-size:14px;max-width:240px;position:relative">
+        Scommetti sul tuo sport preferito!
+        <div style="position:absolute;bottom:-8px;left:20px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:8px solid var(--sisal-dark)"></div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>text</td><td>string</td><td>Balloon text</td></tr>
+      <tr><td>position</td><td>"top" | "bottom"</td><td>Arrow position</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Listing -->
+<section class="comp-section" id="Listing">
+  <h3 class="comp-section__title">Listing</h3>
+  <div class="comp-section__import">import { <code>Listing</code> } from '@/components/Listing'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div style="width:328px">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--sisal-border-alt)">
+          <div style="width:40px;height:40px;border-radius:8px;background:var(--sisal-border-alt);display:flex;align-items:center;justify-content:center">&#9917;</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:500">Serie A</div><div style="font-size:12px;color:var(--sisal-text-muted)">15 eventi</div></div>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="#929597" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--sisal-border-alt)">
+          <div style="width:40px;height:40px;border-radius:8px;background:var(--sisal-border-alt);display:flex;align-items:center;justify-content:center">&#9917;</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:500">Premier League</div><div style="font-size:12px;color:var(--sisal-text-muted)">12 eventi</div></div>
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke="#929597" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>items</td><td>ListItem[]</td><td>List items</td></tr>
+      <tr><td>onItemClick</td><td>(item) => void</td><td>Item click handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Streaming -->
+<section class="comp-section" id="Streaming">
+  <h3 class="comp-section__title">Streaming</h3>
+  <div class="comp-section__import">import { <code>Streaming</code> } from '@/components/Streaming'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div class="streaming-demo">
+        <div class="streaming-demo__play">&#9654;</div>
+        <div style="position:absolute;top:8px;left:8px"><span class="badge badge--s badge--live">Live</span></div>
+        <div style="position:absolute;bottom:8px;left:8px;right:8px;display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:white">
+          <span>Inter</span><span style="color:var(--sisal-orange)">2 - 1</span><span>Milan</span>
+        </div>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>streamUrl</td><td>string</td><td>Stream URL</td></tr>
+      <tr><td>matchInfo</td><td>MatchData</td><td>Match overlay info</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Tutorial -->
+<section class="comp-section" id="Tutorial">
+  <h3 class="comp-section__title">Tutorial</h3>
+  <div class="comp-section__import">import { <code>Tutorial</code> } from '@/components/Tutorial'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">Tutorial - Step-by-step tutorial overlay with spotlight highlighting and step navigation</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>steps</td><td>TutorialStep[]</td><td>Tutorial steps</td></tr><tr><td>currentStep</td><td>number</td><td>Current step</td></tr></table>
+  </div>
+</section>
+
+<!-- ThankYouPage -->
+<section class="comp-section" id="ThankYouPage">
+  <h3 class="comp-section__title">ThankYouPage</h3>
+  <div class="comp-section__import">import { <code>ThankYouPage</code> } from '@/components/ThankYouPage'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div style="width:328px;text-align:center;padding:32px 16px">
+        <div style="font-size:48px;margin-bottom:16px">&#10003;</div>
+        <h3 style="font-family:Mulish,sans-serif;font-weight:700;font-size:20px;margin-bottom:8px">Scommessa piazzata!</h3>
+        <p style="font-size:14px;color:var(--sisal-text-alt);margin-bottom:16px">La tua scommessa e stata confermata. Buona fortuna!</p>
+        <button class="btn btn--default">Le mie scommesse</button>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>title</td><td>string</td><td>Success title</td></tr>
+      <tr><td>description</td><td>string</td><td>Success description</td></tr>
+      <tr><td>ctaLabel</td><td>string</td><td>CTA button text</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- SelfBet -->
+<section class="comp-section" id="SelfBet">
+  <h3 class="comp-section__title">SelfBet</h3>
+  <div class="comp-section__import">import { <code>SelfBet</code> } from '@/components/SelfBet'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">SelfBet - Self-exclusion and responsible gambling interface with limits and cooldown options</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>currentLimits</td><td>Limits</td><td>Current limit settings</td></tr><tr><td>onUpdate</td><td>(limits) => void</td><td>Update handler</td></tr></table>
+  </div>
+</section>
+
+<!-- SharedTip -->
+<section class="comp-section" id="SharedTip">
+  <h3 class="comp-section__title">SharedTip</h3>
+  <div class="comp-section__import">import { <code>SharedTip</code> } from '@/components/SharedTip'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">SharedTip - Shared tip card received from another user with accept/decline actions</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>tipster</td><td>TipsterData</td><td>Sender info</td></tr><tr><td>tip</td><td>TipData</td><td>Tip details</td></tr></table>
+  </div>
+</section>
+
+<!-- CartFloating -->
+<section class="comp-section" id="CartFloating">
+  <h3 class="comp-section__title">CartFloating</h3>
+  <div class="comp-section__import">import { <code>CartFloating</code> } from '@/components/CartFloating'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview">
+      <div style="display:flex;align-items:center;gap:8px;background:var(--sisal-dark-alt);color:white;padding:8px 16px;border-radius:100px;box-shadow:0 4px 12px rgba(0,0,0,0.2);cursor:pointer">
+        <div style="position:relative">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:var(--sisal-orange);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--sisal-dark)">3</span>
+        </div>
+        <span style="font-size:14px;font-weight:700">Biglietto</span>
+        <span style="font-size:12px;opacity:0.7">3.45</span>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>count</td><td>number</td><td>Items in cart</td></tr>
+      <tr><td>totalOdds</td><td>string</td><td>Total odds</td></tr>
+      <tr><td>onClick</td><td>() => void</td><td>Open cart handler</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- Slider -->
+<section class="comp-section" id="Slider">
+  <h3 class="comp-section__title">Slider</h3>
+  <div class="comp-section__import">import { <code>Slider</code> } from '@/components/Slider'</div>
+  <div class="comp-card">
+    <div class="comp-card__preview" style="gap:16px;flex-direction:column;align-items:flex-start">
+      <input type="range" class="slider-demo" min="0" max="100" value="40">
+      <div style="display:flex;align-items:center;gap:12px;width:280px">
+        <span style="font-size:12px;color:var(--sisal-text-muted)">1&euro;</span>
+        <input type="range" class="slider-demo" style="flex:1;width:auto" min="1" max="100" value="25">
+        <span style="font-size:12px;color:var(--sisal-text-muted)">100&euro;</span>
+      </div>
+    </div>
+    <table class="props-table">
+      <tr><th>Prop</th><th>Type</th><th>Description</th></tr>
+      <tr><td>min / max</td><td>number</td><td>Range limits</td></tr>
+      <tr><td>value</td><td>number</td><td>Current value</td></tr>
+      <tr><td>onChange</td><td>(value) => void</td><td>Change handler</td></tr>
+    </table>
+  </div>
+</section>
+
+
+<!-- ============================
+     WIDGETS
+     ============================ -->
+<div class="category-divider">
+  <h2>Widgets</h2>
+  <p>Specialized widget components</p>
+</div>
+
+<section class="comp-section" id="WidgetTabellone">
+  <h3 class="comp-section__title">WidgetTabellone</h3>
+  <div class="comp-section__import">import { <code>WidgetTabellone</code> } from '@/components/WidgetTabellone'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">WidgetTabellone - Full scoreboard widget with live match data, stats, and timeline</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>match</td><td>MatchData</td><td>Match data</td></tr><tr><td>stats</td><td>MatchStats</td><td>Match statistics</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="WidgetOpta">
+  <h3 class="comp-section__title">WidgetOpta</h3>
+  <div class="comp-section__import">import { <code>WidgetOpta</code> } from '@/components/WidgetOpta'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">WidgetOpta - Opta data integration widget showing advanced match analytics and visualizations</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>matchId</td><td>string</td><td>Opta match ID</td></tr><tr><td>widgetType</td><td>string</td><td>Widget visualization type</td></tr></table>
+  </div>
+</section>
+
+<section class="comp-section" id="Component3">
+  <h3 class="comp-section__title">Component3</h3>
+  <div class="comp-section__import">import { <code>Component3</code> } from '@/components/Component3'</div>
+  <div class="comp-card"><div class="comp-card__preview"><div class="placeholder" style="width:328px">Component3 - Utility component</div></div>
+    <table class="props-table"><tr><th>Prop</th><th>Type</th><th>Description</th></tr><tr><td>className</td><td>string</td><td>Additional CSS classes</td></tr></table>
+  </div>
+</section>
+
+
+<!-- Footer -->
+<div style="margin-top:64px;padding-top:24px;border-top:1px solid var(--sisal-border);text-align:center;color:var(--sisal-text-muted);font-size:13px">
+  <p>Sisal Betting App DS - 73 Components</p>
+  <p style="margin-top:4px">Generated from <code>src/components/</code> - React + Tailwind CSS</p>
+</div>
+
+</main>
+
+<script>
+// Close mobile sidebar on link click
+document.querySelectorAll('.sidebar__link').forEach(link => {
+  link.addEventListener('click', () => {
+    document.querySelector('.sidebar').classList.remove('sidebar--open');
+  });
+});
+
+// Highlight active sidebar link on scroll
+const sections = document.querySelectorAll('.comp-section');
+const navLinks = document.querySelectorAll('.sidebar__link');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinks.forEach(link => {
+        link.style.color = link.getAttribute('href') === '#' + id ? 'var(--sisal-green)' : '';
+        link.style.borderLeftColor = link.getAttribute('href') === '#' + id ? 'var(--sisal-green)' : 'transparent';
+      });
+    }
+  });
+}, { rootMargin: '-80px 0px -70% 0px' });
+
+sections.forEach(section => observer.observe(section));
+</script>
+</body>
+</html>
