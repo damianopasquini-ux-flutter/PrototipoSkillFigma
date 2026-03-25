@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sisal Betting App Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+<style>
+:root {
+  --primary: #bed62f;
+  --primary-dark: #a3ba1e;
+  --dark: #262c2f;
+  --dark-2: #2f3c43;
+  --orange: #ff8e0d;
+  --red: #e73947;
+  --purple: #722dad;
+  --blue: #67aaf9;
+  --yellow: #ffbf00;
+  --green-success: #1a924b;
+  --gray-1: #929597;
+  --gray-2: #c9cacb;
+  --gray-3: #e9eaea;
+  --gray-4: #5c6063;
+  --gray-5: #8a939e;
+  --gray-6: #f5f5f5;
+  --white: #ffffff;
+  --font: 'Roboto', sans-serif;
+  --app-w: 360px;
+  --app-h: 812px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: var(--font);
+  background: #1a1a2e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Phone Frame */
+.phone-frame {
+  width: calc(var(--app-w) + 24px);
+  height: calc(var(--app-h) + 100px);
+  background: #111;
+  border-radius: 44px;
+  padding: 50px 12px;
+  position: relative;
+  box-shadow: 0 0 0 2px #333, 0 0 0 4px #111, 0 20px 60px rgba(0,0,0,.5);
+}
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 28px;
+  background: #1a1a1a;
+  border-radius: 14px;
+}
+
+.app {
+  width: var(--app-w);
+  height: var(--app-h);
+  background: var(--white);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===================== TOP NAV ===================== */
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--dark);
+  height: 52px;
+  flex-shrink: 0;
+}
+.top-nav .left { display:flex; align-items:center; gap:12px; }
+.top-nav .right { display:flex; align-items:center; gap:12px; }
+.top-nav .icon { color:var(--white); font-size:24px; cursor:pointer; }
+.top-nav .logo {
+  width: 32px; height: 32px; background: var(--primary); border-radius: 6px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:900; font-size:14px; color:var(--dark);
+}
+.top-nav .balance {
+  color:var(--white); font-size:13px; font-weight:500;
+  background:rgba(255,255,255,.1); padding:4px 10px; border-radius:16px;
+}
+.top-nav .avatar {
+  width:32px; height:32px; border-radius:50%; background:var(--primary);
+  display:flex; align-items:center; justify-content:center;
+}
+.top-nav .avatar .material-icons-round { font-size:18px; color:var(--dark); }
+
+/* ===================== SCREENS ===================== */
+.screen {
+  flex: 1;
+  overflow-y: auto;
+  display: none;
+  flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+}
+.screen.active { display:flex; }
+.screen-scroll { flex:1; overflow-y:auto; padding-bottom:80px; }
+
+/* ===================== TAB ROW (Sport/Live/Virtual) ===================== */
+.tab-row {
+  display:flex; gap:8px; padding:10px 16px; background:var(--white);
+}
+.tab-pill {
+  padding:6px 20px; border-radius:20px; font-size:13px; font-weight:500;
+  cursor:pointer; border:1.5px solid var(--gray-3); color:var(--gray-4);
+  transition: all .2s;
+}
+.tab-pill.active { background:var(--primary); color:var(--dark); border-color:var(--primary); font-weight:700; }
+
+/* ===================== SEARCH BAR ===================== */
+.search-bar {
+  margin:0 16px 8px; padding:10px 14px; background:var(--gray-6);
+  border-radius:10px; display:flex; align-items:center; gap:8px;
+}
+.search-bar .material-icons-round { color:var(--gray-5); font-size:20px; }
+.search-bar span { color:var(--gray-5); font-size:13px; }
+
+/* ===================== HERO BANNER ===================== */
+.hero-banner {
+  margin:0 16px 12px; height:140px; background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
+  border-radius:14px; padding:24px 20px; display:flex; flex-direction:column; justify-content:center;
+  position:relative; overflow:hidden;
+}
+.hero-banner::after {
+  content:''; position:absolute; right:-20px; top:-20px;
+  width:140px; height:140px; border-radius:50%;
+  background:rgba(190,214,47,.1);
+}
+.hero-banner h3 { color:var(--primary); font-size:20px; font-weight:700; margin-bottom:6px; }
+.hero-banner p { color:var(--gray-2); font-size:13px; }
+
+/* ===================== FILTER CHIPS ===================== */
+.chips-row {
+  display:flex; gap:8px; padding:0 16px 12px; overflow-x:auto;
+}
+.chips-row::-webkit-scrollbar { display:none; }
+.chip {
+  padding:6px 16px; border-radius:20px; font-size:12px; font-weight:500;
+  cursor:pointer; white-space:nowrap; border:1.5px solid var(--gray-3); color:var(--gray-4);
+  transition: all .2s;
+}
+.chip.active { background:var(--primary); color:var(--dark); border-color:var(--primary); font-weight:600; }
+
+/* ===================== SECTION TITLE ===================== */
+.section-title {
+  padding:4px 16px 8px; display:flex; justify-content:space-between; align-items:baseline;
+}
+.section-title h4 { font-size:16px; font-weight:700; color:var(--dark); }
+.section-title span { font-size:12px; color:var(--gray-5); }
+
+/* ===================== MATCH CARD ===================== */
+.match-card {
+  margin:0 16px 10px; background:var(--white); border-radius:12px;
+  padding:14px 16px; border:1px solid var(--gray-3);
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+.match-card .match-info { margin-bottom:10px; }
+.match-card .teams { font-size:14px; font-weight:700; color:var(--dark); }
+.match-card .meta { font-size:11px; color:var(--gray-5); margin-top:2px; }
+.odds-row { display:flex; gap:8px; }
+.odd-btn {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  padding:8px 4px; border-radius:8px; background:var(--gray-6);
+  cursor:pointer; border:1.5px solid transparent; transition:all .15s;
+}
+.odd-btn:hover { border-color:var(--gray-2); }
+.odd-btn.selected { background:var(--primary); border-color:var(--primary); }
+.odd-btn.selected .odd-label { color:var(--dark); }
+.odd-btn.selected .odd-value { color:var(--dark); }
+.odd-label { font-size:10px; color:var(--gray-5); font-weight:500; }
+.odd-value { font-size:14px; font-weight:700; color:var(--dark); }
+.odd-arrow { font-size:10px; margin-left:2px; }
+.odd-arrow.up { color:var(--green-success); }
+.odd-arrow.down { color:var(--red); }
+
+/* ===================== LIVE SPECIFIC ===================== */
+.live-dark-tabs {
+  display:flex; background:var(--dark-2); padding:0 16px;
+}
+.live-dark-tab {
+  padding:10px 16px; color:var(--gray-5); font-size:13px; font-weight:500;
+  cursor:pointer; border-bottom:2px solid transparent; transition:all .2s;
+}
+.live-dark-tab.active { color:var(--white); border-bottom-color:var(--primary); }
+
+.live-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 10px; background:var(--dark); border-radius:6px; margin:12px 16px 8px;
+}
+.live-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--orange); animation:pulse 1.5s infinite; }
+.live-badge span { color:var(--orange); font-size:12px; font-weight:700; }
+@keyframes pulse { 0%,100%{opacity:1;}50%{opacity:.4;} }
+
+.match-card .live-score {
+  display:flex; align-items:center; justify-content:space-between;
+}
+.match-card .live-score .score { font-size:18px; font-weight:900; color:var(--dark); }
+.match-card .live-time {
+  font-size:12px; font-weight:700; color:var(--orange);
+  background:rgba(255,142,13,.12); padding:2px 8px; border-radius:4px;
+}
+
+/* ===================== MATCH DETAIL ===================== */
+.match-header {
+  background:var(--dark); padding:20px 16px; text-align:center;
+}
+.match-header .time { color:var(--primary); font-size:14px; font-weight:700; }
+.match-header .versus { color:var(--white); font-size:22px; font-weight:900; margin:8px 0; }
+.match-header .detail-meta { color:var(--gray-5); font-size:12px; }
+
+.segment-control {
+  display:flex; margin:12px 16px; background:var(--gray-6); border-radius:10px; padding:3px;
+}
+.segment-btn {
+  flex:1; text-align:center; padding:8px 4px; font-size:13px; font-weight:500;
+  color:var(--gray-5); border-radius:8px; cursor:pointer; transition:all .2s;
+}
+.segment-btn.active { background:var(--white); color:var(--dark); font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,.08); }
+
+.market-section { padding:0 16px 12px; }
+.market-header {
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:8px 0;
+}
+.market-header h5 { font-size:14px; font-weight:700; color:var(--dark); }
+.market-header span { font-size:11px; color:var(--gray-5); }
+
+/* ===================== CART ===================== */
+.cart-section { padding:0 16px; }
+.cart-section .cart-header { padding:16px 0 12px; }
+.cart-section .cart-header h3 { font-size:18px; font-weight:700; color:var(--dark); }
+.cart-section .cart-header span { font-size:12px; color:var(--gray-5); }
+
+.cart-item {
+  background:var(--gray-6); border-radius:12px; padding:14px; margin-bottom:10px;
+  position:relative;
+}
+.cart-item .ci-match { font-size:13px; font-weight:700; color:var(--dark); }
+.cart-item .ci-market { font-size:11px; color:var(--gray-5); margin-top:2px; }
+.cart-item .ci-bottom { display:flex; justify-content:space-between; align-items:center; margin-top:8px; }
+.cart-item .ci-result {
+  background:var(--primary); padding:3px 10px; border-radius:4px;
+  font-size:12px; font-weight:700; color:var(--dark);
+}
+.cart-item .ci-odds { font-size:16px; font-weight:900; color:var(--dark); }
+.cart-item .ci-close {
+  position:absolute; top:10px; right:10px; cursor:pointer;
+  color:var(--gray-5); font-size:18px;
+}
+
+.cart-total {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 0; border-top:1px solid var(--gray-3); margin-top:4px;
+}
+.cart-total .label { font-size:14px; font-weight:500; color:var(--gray-4); }
+.cart-total .value { font-size:22px; font-weight:900; color:var(--primary); }
+
+.cart-input {
+  display:flex; align-items:center; background:var(--gray-6);
+  border-radius:10px; padding:12px 16px; margin:8px 0;
+}
+.cart-input label { font-size:13px; color:var(--gray-5); margin-right:auto; }
+.cart-input input {
+  border:none; background:transparent; text-align:right;
+  font-size:16px; font-weight:700; color:var(--dark); width:100px;
+  font-family:var(--font); outline:none;
+}
+.cart-win {
+  text-align:center; padding:8px 0 14px;
+  font-size:14px; color:var(--green-success); font-weight:600;
+}
+.btn-place {
+  width:100%; padding:16px; border:none; border-radius:12px;
+  background:var(--orange); color:var(--white); font-size:16px;
+  font-weight:700; cursor:pointer; font-family:var(--font);
+  transition:transform .1s;
+}
+.btn-place:active { transform:scale(.97); }
+
+/* ===================== MY BETS ===================== */
+.bet-card {
+  margin:0 16px 10px; background:var(--white); border-radius:12px;
+  padding:14px 16px; border:1px solid var(--gray-3);
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+  position:relative; overflow:hidden;
+}
+.bet-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
+}
+.bet-card.win::before { background:var(--green-success); }
+.bet-card.lost::before { background:var(--red); }
+.bet-card.pending::before { background:var(--orange); }
+.bet-card .bc-top { display:flex; justify-content:space-between; align-items:center; }
+.bet-card .bc-match { font-size:14px; font-weight:700; color:var(--dark); }
+.bet-card .bc-date { font-size:11px; color:var(--gray-5); margin-top:2px; }
+.bet-card .bc-bottom { display:flex; justify-content:space-between; align-items:center; margin-top:10px; }
+.status-badge {
+  padding:3px 10px; border-radius:4px; font-size:11px; font-weight:700;
+}
+.status-badge.win { background:rgba(26,146,75,.1); color:var(--green-success); }
+.status-badge.lost { background:rgba(231,57,71,.1); color:var(--red); }
+.status-badge.pending { background:rgba(255,142,13,.1); color:var(--orange); }
+.bet-amount { font-size:16px; font-weight:900; color:var(--dark); }
+.bet-amount.win { color:var(--green-success); }
+.bet-amount.lost { color:var(--red); }
+
+/* ===================== FLOATING CART BUTTON ===================== */
+.fab-cart {
+  position:absolute; bottom:70px; right:16px;
+  background:var(--primary); color:var(--dark);
+  padding:12px 20px; border-radius:28px;
+  font-size:13px; font-weight:700; cursor:pointer;
+  box-shadow:0 4px 16px rgba(190,214,47,.4);
+  display:flex; align-items:center; gap:6px;
+  z-index:10; transition:transform .15s;
+}
+.fab-cart:active { transform:scale(.95); }
+.fab-cart .material-icons-round { font-size:18px; }
+
+/* ===================== BOTTOM NAV ===================== */
+.bottom-nav {
+  display:flex; background:var(--white); border-top:1px solid var(--gray-3);
+  height:60px; flex-shrink:0; position:relative; z-index:20;
+}
+.nav-item {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:2px; cursor:pointer; transition:color .2s;
+  color:var(--gray-5);
+}
+.nav-item.active { color:var(--primary); }
+.nav-item .material-icons-round { font-size:22px; }
+.nav-item span { font-size:10px; font-weight:500; }
+
+/* ===================== TRANSITIONS ===================== */
+.screen { animation:fadeIn .25s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);} }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+<div class="app">
+
+  <!-- TOP NAV -->
+  <div class="top-nav" id="topNav">
+    <div class="left">
+      <span class="material-icons-round icon" id="navLeftIcon">menu</span>
+      <div class="logo">S</div>
+    </div>
+    <div class="right">
+      <div class="balance">&euro; 125,00</div>
+      <div class="avatar"><span class="material-icons-round">person</span></div>
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 1: HOME ========== -->
+  <div class="screen active" id="screen-home">
+    <div class="screen-scroll">
+      <div class="tab-row">
+        <div class="tab-pill active" data-tab="home" onclick="switchMainTab(this,'home')">Sport</div>
+        <div class="tab-pill" data-tab="live" onclick="switchMainTab(this,'live')">Live</div>
+        <div class="tab-pill" data-tab="home" onclick="switchMainTab(this,'home')">Virtual</div>
+      </div>
+      <div class="search-bar">
+        <span class="material-icons-round">search</span>
+        <span>Cerca evento...</span>
+      </div>
+      <div class="hero-banner">
+        <h3>Scopri le promo</h3>
+        <p>Le migliori quote del giorno</p>
+      </div>
+      <div class="chips-row">
+        <div class="chip active" onclick="toggleChip(this)">Calcio</div>
+        <div class="chip" onclick="toggleChip(this)">Tennis</div>
+        <div class="chip" onclick="toggleChip(this)">Basket</div>
+        <div class="chip" onclick="toggleChip(this)">F1</div>
+        <div class="chip" onclick="toggleChip(this)">Volley</div>
+      </div>
+      <div class="section-title">
+        <h4>Partite del giorno</h4>
+        <span>Serie A &middot; Oggi</span>
+      </div>
+      <div class="match-card" onclick="goToDetail(event)">
+        <div class="match-info">
+          <div class="teams">Inter &mdash; Juventus</div>
+          <div class="meta">Oggi 20:45 &middot; Serie A</div>
+        </div>
+        <div class="odds-row">
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">1</span><span class="odd-value">2.10</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">X</span><span class="odd-value">3.40</span></div>
+          <div class="odd-btn selected" onclick="toggleOdd(event,this)"><span class="odd-label">2</span><span class="odd-value">3.50</span></div>
+        </div>
+      </div>
+      <div class="match-card" onclick="goToDetail(event)">
+        <div class="match-info">
+          <div class="teams">Roma &mdash; Napoli</div>
+          <div class="meta">Oggi 18:00 &middot; Serie A</div>
+        </div>
+        <div class="odds-row">
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">1</span><span class="odd-value">2.80</span></div>
+          <div class="odd-btn selected" onclick="toggleOdd(event,this)"><span class="odd-label">X</span><span class="odd-value">3.20</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">2</span><span class="odd-value">2.60</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="fab-cart" onclick="navigate('cart')">
+      <span class="material-icons-round">shopping_cart</span>
+      Carrello (2)
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 2: LIVE ========== -->
+  <div class="screen" id="screen-live">
+    <div class="screen-scroll">
+      <div class="tab-row">
+        <div class="tab-pill" data-tab="home" onclick="switchMainTab(this,'home')">Sport</div>
+        <div class="tab-pill active" data-tab="live" onclick="switchMainTab(this,'live')">Live</div>
+        <div class="tab-pill" data-tab="home" onclick="switchMainTab(this,'home')">Virtual</div>
+      </div>
+      <div class="live-dark-tabs">
+        <div class="live-dark-tab active" onclick="toggleLiveTab(this)">Tutti</div>
+        <div class="live-dark-tab" onclick="toggleLiveTab(this)">Calcio</div>
+        <div class="live-dark-tab" onclick="toggleLiveTab(this)">Tennis</div>
+      </div>
+      <div class="live-badge"><div class="dot"></div><span>Live</span></div>
+      <div class="chips-row">
+        <div class="chip active" onclick="toggleChip(this)">In corso</div>
+        <div class="chip" onclick="toggleChip(this)">Prossimi</div>
+        <div class="chip" onclick="toggleChip(this)">Oggi</div>
+      </div>
+      <div class="section-title">
+        <h4>In corso</h4>
+        <span>12 eventi live</span>
+      </div>
+      <!-- Live Match 1 -->
+      <div class="match-card" onclick="goToDetail(event)">
+        <div class="match-info">
+          <div class="live-score">
+            <div>
+              <div class="teams">Roma &mdash; Napoli</div>
+              <div class="meta">Serie A</div>
+            </div>
+            <div style="text-align:right">
+              <div class="score">2 - 1</div>
+              <div class="live-time">67&apos;</div>
+            </div>
+          </div>
+        </div>
+        <div class="odds-row">
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">1</span><span class="odd-value">1.45</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">X</span><span class="odd-value">4.80</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">2</span><span class="odd-value">6.20</span></div>
+        </div>
+      </div>
+      <!-- Live Match 2 -->
+      <div class="match-card" onclick="goToDetail(event)">
+        <div class="match-info">
+          <div class="live-score">
+            <div>
+              <div class="teams">Milan &mdash; Atalanta</div>
+              <div class="meta">Serie A</div>
+            </div>
+            <div style="text-align:right">
+              <div class="score">0 - 0</div>
+              <div class="live-time">23&apos;</div>
+            </div>
+          </div>
+        </div>
+        <div class="odds-row">
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">1</span><span class="odd-value">2.30</span></div>
+          <div class="odd-btn selected" onclick="toggleOdd(event,this)"><span class="odd-label">X</span><span class="odd-value">3.10</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">2</span><span class="odd-value">3.40</span></div>
+        </div>
+      </div>
+      <!-- Live Match 3 -->
+      <div class="match-card" onclick="goToDetail(event)">
+        <div class="match-info">
+          <div class="live-score">
+            <div>
+              <div class="teams">Lazio &mdash; Fiorentina</div>
+              <div class="meta">Serie A</div>
+            </div>
+            <div style="text-align:right">
+              <div class="score">1 - 1</div>
+              <div class="live-time">81&apos;</div>
+            </div>
+          </div>
+        </div>
+        <div class="odds-row">
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">1</span><span class="odd-value">3.60</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">X</span><span class="odd-value">2.90</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">2</span><span class="odd-value">3.10</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="fab-cart" onclick="navigate('cart')">
+      <span class="material-icons-round">shopping_cart</span>
+      Carrello (2)
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 3: MATCH DETAIL ========== -->
+  <div class="screen" id="screen-detail">
+    <div class="screen-scroll">
+      <div class="match-header">
+        <div class="time">20:45</div>
+        <div class="versus">Juventus &mdash; Milan</div>
+        <div class="detail-meta">Serie A &middot; Giornata 28 &middot; Oggi 20:45</div>
+      </div>
+      <div class="segment-control">
+        <div class="segment-btn active" onclick="toggleSegment(this)">Mercati</div>
+        <div class="segment-btn" onclick="toggleSegment(this)">Statistiche</div>
+        <div class="segment-btn" onclick="toggleSegment(this)">Formazioni</div>
+      </div>
+      <!-- Market: 1X2 -->
+      <div class="market-section">
+        <div class="market-header">
+          <h5>Esito finale 1X2</h5>
+          <span>3 mercati</span>
+        </div>
+        <div class="odds-row">
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">1</span><span class="odd-value">2.45</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">X</span><span class="odd-value">3.30</span></div>
+          <div class="odd-btn selected" onclick="toggleOdd(event,this)"><span class="odd-label">2</span><span class="odd-value">2.90</span></div>
+        </div>
+      </div>
+      <!-- Market: Under/Over -->
+      <div class="market-section">
+        <div class="market-header">
+          <h5>Under/Over 2.5</h5>
+          <span>2 mercati</span>
+        </div>
+        <div class="odds-row">
+          <div class="odd-btn" onclick="toggleOdd(event,this)">
+            <span class="odd-label">Under 2.5</span>
+            <span class="odd-value">1.85 <span class="odd-arrow up">&uarr;</span></span>
+          </div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)">
+            <span class="odd-label">Over 2.5</span>
+            <span class="odd-value">1.95 <span class="odd-arrow down">&darr;</span></span>
+          </div>
+        </div>
+      </div>
+      <!-- Market: Doppia Chance -->
+      <div class="market-section">
+        <div class="market-header">
+          <h5>Doppia chance</h5>
+          <span>3 mercati</span>
+        </div>
+        <div class="odds-row">
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">1X</span><span class="odd-value">1.35</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">12</span><span class="odd-value">1.30</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">X2</span><span class="odd-value">1.55</span></div>
+        </div>
+      </div>
+      <!-- Market: Goal/No Goal -->
+      <div class="market-section">
+        <div class="market-header">
+          <h5>Goal / No Goal</h5>
+          <span>2 mercati</span>
+        </div>
+        <div class="odds-row">
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">Goal</span><span class="odd-value">1.70</span></div>
+          <div class="odd-btn" onclick="toggleOdd(event,this)"><span class="odd-label">No Goal</span><span class="odd-value">2.10</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="fab-cart" onclick="navigate('cart')">
+      <span class="material-icons-round">shopping_cart</span>
+      Carrello (2)
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 4: CART ========== -->
+  <div class="screen" id="screen-cart">
+    <div class="screen-scroll">
+      <div class="cart-section">
+        <div class="cart-header">
+          <h3>Il tuo carrello</h3>
+          <span>3 scommesse</span>
+        </div>
+        <!-- Cart Item 1 -->
+        <div class="cart-item">
+          <span class="material-icons-round ci-close" onclick="removeCartItem(this)">close</span>
+          <div class="ci-match">Inter &mdash; Juventus</div>
+          <div class="ci-market">Esito finale 1X2</div>
+          <div class="ci-bottom">
+            <div class="ci-result">2</div>
+            <div class="ci-odds">3.50</div>
+          </div>
+        </div>
+        <!-- Cart Item 2 -->
+        <div class="cart-item">
+          <span class="material-icons-round ci-close" onclick="removeCartItem(this)">close</span>
+          <div class="ci-match">Roma &mdash; Napoli</div>
+          <div class="ci-market">Esito finale 1X2</div>
+          <div class="ci-bottom">
+            <div class="ci-result">X</div>
+            <div class="ci-odds">3.20</div>
+          </div>
+        </div>
+        <!-- Cart Item 3 -->
+        <div class="cart-item">
+          <span class="material-icons-round ci-close" onclick="removeCartItem(this)">close</span>
+          <div class="ci-match">Juventus &mdash; Milan</div>
+          <div class="ci-market">Esito finale 1X2</div>
+          <div class="ci-bottom">
+            <div class="ci-result">2</div>
+            <div class="ci-odds">2.90</div>
+          </div>
+        </div>
+
+        <div class="cart-total">
+          <div class="label">Quota totale</div>
+          <div class="value">12.45</div>
+        </div>
+        <div class="cart-input">
+          <label>Importo</label>
+          <input type="text" value="&euro; 10,00">
+        </div>
+        <div class="cart-win">Vincita potenziale: &euro; 124,50</div>
+        <button class="btn-place">Piazza scommessa</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SCREEN 5: MY BETS ========== -->
+  <div class="screen" id="screen-mybets">
+    <div class="screen-scroll">
+      <div class="segment-control" style="margin-top:12px">
+        <div class="segment-btn active" onclick="toggleSegment(this)">Aperte</div>
+        <div class="segment-btn" onclick="toggleSegment(this)">Chiuse</div>
+        <div class="segment-btn" onclick="toggleSegment(this)">Tutte</div>
+      </div>
+      <div class="section-title" style="padding-top:8px">
+        <h4>Le tue scommesse</h4>
+        <span>Ultime 7 giorni</span>
+      </div>
+      <!-- Bet Win -->
+      <div class="bet-card win">
+        <div class="bc-top">
+          <div>
+            <div class="bc-match">Juventus &mdash; Milan</div>
+            <div class="bc-date">Ieri &middot; Esito 1X2 &rarr; 2</div>
+          </div>
+        </div>
+        <div class="bc-bottom">
+          <span class="status-badge win">Vincita</span>
+          <span class="bet-amount win">&euro; 25,00</span>
+        </div>
+      </div>
+      <!-- Bet Lost -->
+      <div class="bet-card lost">
+        <div class="bc-top">
+          <div>
+            <div class="bc-match">Inter &mdash; Roma</div>
+            <div class="bc-date">2 giorni fa &middot; Esito 1X2 &rarr; 1</div>
+          </div>
+        </div>
+        <div class="bc-bottom">
+          <span class="status-badge lost">Perdita</span>
+          <span class="bet-amount lost">&minus;&euro; 10,00</span>
+        </div>
+      </div>
+      <!-- Bet Pending -->
+      <div class="bet-card pending">
+        <div class="bc-top">
+          <div>
+            <div class="bc-match">Napoli &mdash; Lazio</div>
+            <div class="bc-date">Oggi &middot; Esito 1X2 &rarr; 1</div>
+          </div>
+        </div>
+        <div class="bc-bottom">
+          <span class="status-badge pending">In corso</span>
+          <span class="bet-amount">&euro; 15,00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="navigate('home')">
+      <span class="material-icons-round">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" onclick="navigate('live')">
+      <span class="material-icons-round">stream</span>
+      <span>Tipster</span>
+    </div>
+    <div class="nav-item" onclick="navigate('cart')">
+      <span class="material-icons-round">receipt_long</span>
+      <span>Biglietto</span>
+    </div>
+    <div class="nav-item" onclick="navigate('mybets')">
+      <span class="material-icons-round">history</span>
+      <span>MyBets</span>
+    </div>
+    <div class="nav-item" onclick="navigate('home')">
+      <span class="material-icons-round">local_offer</span>
+      <span>Promo</span>
+    </div>
+  </div>
+
+</div><!-- /app -->
+</div><!-- /phone-frame -->
+
+<script>
+// ---- Navigation ----
+function navigate(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('screen-' + screen);
+  if (target) target.classList.add('active');
+
+  // Update bottom nav active state
+  document.querySelectorAll('.nav-item').forEach((n, i) => n.classList.remove('active'));
+  const map = { home: 0, live: 1, cart: 2, mybets: 3, promo: 4 };
+  const idx = map[screen];
+  if (idx !== undefined) document.querySelectorAll('.nav-item')[idx].classList.add('active');
+
+  // Update top nav back arrow for detail screen
+  const leftIcon = document.getElementById('navLeftIcon');
+  if (screen === 'detail') {
+    leftIcon.textContent = 'arrow_back';
+    leftIcon.onclick = function() { navigate(lastScreen || 'home'); };
+  } else {
+    leftIcon.textContent = 'menu';
+    leftIcon.onclick = null;
+  }
+
+  // Hide FAB on cart screen
+  document.querySelectorAll('.fab-cart').forEach(f => {
+    f.style.display = (screen === 'cart') ? 'none' : 'flex';
+  });
+}
+
+let lastScreen = 'home';
+
+function goToDetail(e) {
+  // Don't navigate if clicking an odds button
+  if (e.target.closest('.odd-btn')) return;
+  const currentActive = document.querySelector('.screen.active');
+  if (currentActive) lastScreen = currentActive.id.replace('screen-', '');
+  navigate('detail');
+}
+
+// ---- Main Tab Switch (Sport/Live/Virtual) ----
+function switchMainTab(el, screen) {
+  el.closest('.tab-row').querySelectorAll('.tab-pill').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (screen === 'live') navigate('live');
+  else navigate('home');
+}
+
+// ---- Toggle Odds ----
+function toggleOdd(e, el) {
+  e.stopPropagation();
+  el.classList.toggle('selected');
+}
+
+// ---- Toggle Chips ----
+function toggleChip(el) {
+  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ---- Toggle Segments ----
+function toggleSegment(el) {
+  el.parentElement.querySelectorAll('.segment-btn').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ---- Toggle Live Dark Tabs ----
+function toggleLiveTab(el) {
+  el.parentElement.querySelectorAll('.live-dark-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ---- Remove Cart Item ----
+function removeCartItem(el) {
+  const item = el.closest('.cart-item');
+  item.style.transition = 'all .2s';
+  item.style.opacity = '0';
+  item.style.transform = 'translateX(40px)';
+  setTimeout(() => item.remove(), 200);
+}
+</script>
+
+</body>
+</html>
