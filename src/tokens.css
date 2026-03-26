@@ -47,4 +47,32 @@
   --primary-border-secondary: #262c2f;
   --primary-border-cashout: #722dad;
   --appereance-border-default-bg-dark-3: #5c6063;
+
+  /* ====== FILTER LAYOUT TOKENS ====== */
+  --radius-default: 8px;
+  --filter-chips-spacing-default: 8px;
+  --border-size-alt: 0.5px;
+  --spacing-16: 16px;
+  --font-line-height-md: 18px;
+
+  /* ====== FILTER FILL TOKENS ====== */
+  --appereance-filter-chips-fill-selected: #bed62f;
+  --appereance-filter-chips-fill-active-light: #ffffff;
+  --appereance-filter-chips-fill-active-dark: #262c2f;
+  --appereance-filter-fab-fill-button-default: #bed62f;
+  --appereance-filter-fab-fill-chips-default: #ffffff;
+
+  /* ====== FILTER TEXT TOKENS ====== */
+  --appereance-filter-chips-text-select: #262c2f;
+  --appereance-filter-chips-text-active-light: #262c2f;
+  --appereance-filter-chips-text-active-dark: #ffffff;
+  --appereance-filter-fab-text-button-default: #262c2f;
+
+  /* ====== FILTER BORDER TOKENS ====== */
+  --appereance-filter-chips-border-selected: #bed62f;
+  --appereance-filter-chips-border-active: #c9cacb;
+
+  /* ====== BADGE TOKENS ====== */
+  --badge-notification-fill-selected: #bed62f;
+  --badge-notification-text-selected: #262c2f;
 }
