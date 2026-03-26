@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Button — 1:1 DS Proof of Concept</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ====== TOKENS — identical to src/tokens.css and Figma codeSyntax.WEB ====== */
+  :root {
+    --button-radius-default: 100px;
+    --button-spacing-default: 24px;
+    --layout-spacing-8: 8px;
+    --layout-spacing-4: 4px;
+    --layout-spacing-0: 0px;
+    --font-size-sm: 14px;
+    --font-size-xs: 12px;
+
+    --appereance-button-primary-fill-default: #00653b;
+    --appereance-button-primary-fill-default-disabled: rgba(0,101,59,0.5);
+    --appereance-button-primary-fill-checkout: #ff8e0d;
+    --appereance-button-primary-fill-checkout-disabled: rgba(255,142,13,0.5);
+    --appereance-button-primary-fill-delete: #e73947;
+    --appereance-button-primary-fill-delete-disabled: rgba(231,57,71,0.5);
+    --button-primary-fill-alt: #bed62f;
+    --button-primary-fill-alt-disabled: rgba(190,214,47,0.5);
+    --button-primary-fill-floating: #00653b;
+    --appereance-button-secondary-fill-default: transparent;
+    --appereance-button-secondary-fill-cashout: #ffffff;
+
+    --appereance-button-primary-text-default: #ffffff;
+    --appereance-button-primary-text-default-disabled: #ffffff;
+    --appereance-button-primary-text-checkout: #262c2f;
+    --appereance-button-primary-text-delete: #ffffff;
+    --button-primary-text-alt: #262c2f;
+    --button-primary-text-floating: #ffffff;
+    --appereance-button-secondary-text-default: #262c2f;
+    --appereance-button-secondary-text-cashout: #722dad;
+    --appereance-font-color-active: #262c2f;
+
+    --primary-border-secondary: #262c2f;
+    --primary-border-cashout: #722dad;
+    --appereance-border-default-bg-dark-3: #5c6063;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Roboto', sans-serif; background: #f5f5f5; padding: 40px; max-width: 800px; margin: 0 auto; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; color: #00653b; }
+  .subtitle { font-size: 13px; color: #929597; margin-bottom: 32px; }
+  .grid { display: grid; grid-template-columns: 120px 1fr 1fr; gap: 8px 16px; align-items: center; margin-bottom: 8px; }
+  .grid-header { font-size: 11px; font-weight: 700; color: #929597; text-transform: uppercase; letter-spacing: 0.05em; padding-bottom: 8px; border-bottom: 1px solid #e9eaea; }
+  .label { font-size: 12px; color: #929597; }
+  hr { border: none; border-top: 1px solid #e9eaea; margin: 24px 0; }
+  .source { font-size: 11px; color: #c9cacb; margin-top: 32px; line-height: 1.6; }
+  code { background: #e9eaea; padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+
+  /* ====== BUTTON BASE — uses ONLY CSS vars from tokens ====== */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--layout-spacing-8);
+    min-height: 36px;
+    max-height: 40px;
+    padding: var(--layout-spacing-8) var(--button-spacing-default);
+    border-radius: var(--button-radius-default);
+    border: none;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: var(--font-size-sm);
+    line-height: normal;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  /* ====== VARIANTS — token-bound ====== */
+  .btn--default { background: var(--appereance-button-primary-fill-default); color: var(--appereance-button-primary-text-default); }
+  .btn--default-disabled { background: var(--appereance-button-primary-fill-default-disabled); color: var(--appereance-button-primary-text-default-disabled); cursor: not-allowed; }
+
+  .btn--checkout { background: var(--appereance-button-primary-fill-checkout); color: var(--appereance-button-primary-text-checkout); }
+  .btn--checkout-disabled { background: var(--appereance-button-primary-fill-checkout-disabled); color: var(--appereance-button-primary-text-checkout); cursor: not-allowed; }
+
+  .btn--delete { background: var(--appereance-button-primary-fill-delete); color: var(--appereance-button-primary-text-delete); }
+  .btn--delete-disabled { background: var(--appereance-button-primary-fill-delete-disabled); color: var(--appereance-button-primary-text-delete); cursor: not-allowed; }
+
+  .btn--alt { background: var(--button-primary-fill-alt); color: var(--button-primary-text-alt); }
+  .btn--alt-disabled { background: var(--button-primary-fill-alt-disabled); color: var(--button-primary-text-alt); cursor: not-allowed; }
+
+  .btn--secondary { background: var(--appereance-button-secondary-fill-default); color: var(--appereance-button-secondary-text-default); border: 1px solid var(--primary-border-secondary); }
+  .btn--secondary-disabled { background: var(--appereance-button-secondary-fill-default); color: var(--appereance-button-secondary-text-default); border: 1px solid var(--primary-border-secondary); opacity: 0.4; cursor: not-allowed; }
+
+  .btn--ghost { background: var(--appereance-button-secondary-fill-default); color: var(--appereance-button-secondary-text-default); min-height: 40px; }
+  .btn--ghost-disabled { background: var(--appereance-button-secondary-fill-default); color: var(--appereance-button-secondary-text-default); min-height: 40px; opacity: 0.4; cursor: not-allowed; }
+
+  .btn--floating { background: var(--button-primary-fill-floating); color: var(--button-primary-text-floating); font-weight: 500; }
+
+  .btn--cashout { background: var(--appereance-button-secondary-fill-cashout); color: var(--appereance-button-secondary-text-cashout); border: 1px solid var(--primary-border-cashout); padding-top: 0; padding-bottom: 0; }
+  .btn--cashout-disabled { background: var(--appereance-button-secondary-fill-cashout); color: var(--appereance-button-secondary-text-cashout); border: 1px solid var(--primary-border-cashout); padding-top: 0; padding-bottom: 0; opacity: 0.4; cursor: not-allowed; }
+
+  .btn--settings { background: var(--appereance-button-secondary-fill-default); color: var(--appereance-font-color-active); border: 1px solid var(--appereance-border-default-bg-dark-3); font-weight: 500; font-size: var(--font-size-xs); min-height: 30px; padding: 0 var(--layout-spacing-8); gap: var(--layout-spacing-4); }
+  .btn--settings-disabled { background: var(--appereance-button-secondary-fill-default); color: var(--appereance-font-color-active); border: 1px solid var(--appereance-border-default-bg-dark-3); font-weight: 500; font-size: var(--font-size-xs); min-height: 30px; padding: 0 var(--layout-spacing-8); gap: var(--layout-spacing-4); opacity: 0.4; cursor: not-allowed; }
+
+  .btn__icon { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; }
+  .btn__icon svg { width: 20px; height: 20px; }
+</style>
+</head>
+<body>
+
+<h1>Button</h1>
+<p class="subtitle">1:1 Proof of Concept &mdash; Super Hero Figma Agent &mdash; Figma DS node 5245:3802<br>
+Every CSS property uses <code>var(--token)</code> matching Figma <code>setVariableCodeSyntax('WEB', ...)</code></p>
+
+<div class="grid">
+  <span class="grid-header">Variant</span>
+  <span class="grid-header">Enabled</span>
+  <span class="grid-header">Disabled</span>
+
+  <span class="label">Default</span>
+  <div><button class="btn btn--default">Button</button></div>
+  <div><button class="btn btn--default-disabled" disabled>Button</button></div>
+
+  <span class="label">Checkout</span>
+  <div><button class="btn btn--checkout">Button</button></div>
+  <div><button class="btn btn--checkout-disabled" disabled>Button</button></div>
+
+  <span class="label">Delete</span>
+  <div><button class="btn btn--delete">Button</button></div>
+  <div><button class="btn btn--delete-disabled" disabled>Button</button></div>
+
+  <span class="label">Alt</span>
+  <div><button class="btn btn--alt">Button</button></div>
+  <div><button class="btn btn--alt-disabled" disabled>Button</button></div>
+
+  <span class="label">Secondary</span>
+  <div><button class="btn btn--secondary">Button</button></div>
+  <div><button class="btn btn--secondary-disabled" disabled>Button</button></div>
+
+  <span class="label">Ghost</span>
+  <div><button class="btn btn--ghost">Button</button></div>
+  <div><button class="btn btn--ghost-disabled" disabled>Button</button></div>
+
+  <span class="label">Floating</span>
+  <div><button class="btn btn--floating">
+    <span class="btn__icon"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="white" stroke-width="1.5" stroke-dasharray="3 3"/></svg></span>
+    Button
+  </button></div>
+  <div></div>
+
+  <span class="label">Cash Out</span>
+  <div><button class="btn btn--cashout">Button</button></div>
+  <div><button class="btn btn--cashout-disabled" disabled>Button</button></div>
+
+  <span class="label">Settings</span>
+  <div><button class="btn btn--settings">
+    <span class="btn__icon"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#262c2f" stroke-width="1.5"/><circle cx="10" cy="10" r="2.5" fill="#262c2f"/></svg></span>
+    Impostazioni
+  </button></div>
+  <div><button class="btn btn--settings-disabled" disabled>
+    <span class="btn__icon"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#262c2f" stroke-width="1.5"/><circle cx="10" cy="10" r="2.5" fill="#262c2f"/></svg></span>
+    Impostazioni
+  </button></div>
+</div>
+
+<hr>
+
+<div class="source">
+  <strong>Single source of truth chain:</strong><br>
+  Figma DS (node 5245:3802) &rarr; <code>get_design_context(disableCodeConnect: true)</code> &rarr; Token extraction<br>
+  &rarr; Figma variables with <code>setVariableCodeSyntax('WEB', 'var(--token)')</code> + <code>setBoundVariableForPaint</code><br>
+  &rarr; <code>src/tokens.css</code> with same <code>var(--token)</code> names<br>
+  &rarr; <code>src/components/Button/Button.tsx</code> with same <code>var(--token)</code> in styles<br>
+  &rarr; This HTML with same <code>var(--token)</code> in CSS<br><br>
+  Change a token in Figma &rarr; update <code>tokens.css</code> &rarr; everything updates everywhere.
+</div>
+
+</body>
+</html>

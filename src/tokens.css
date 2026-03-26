@@ -1,0 +1,50 @@
+/**
+ * Sisal Betting App DS — Design Tokens
+ *
+ * Generated from Figma variable codeSyntax.WEB values.
+ * These EXACT names are set via setVariableCodeSyntax('WEB', ...) on each Figma variable.
+ * Figma Dev Mode shows these same var() references.
+ *
+ * Source: Figma file 1KwGa2GwNraywm2ukpfGHe
+ */
+
+:root {
+  /* ====== LAYOUT TOKENS ====== */
+  --button-radius-default: 100px;
+  --button-spacing-default: 24px;
+  --layout-spacing-8: 8px;
+  --layout-spacing-4: 4px;
+  --layout-spacing-0: 0px;
+  --font-size-sm: 14px;
+  --font-size-xs: 12px;
+  --font-line-height-xs: 14px;
+
+  /* ====== BUTTON FILL TOKENS ====== */
+  --appereance-button-primary-fill-default: #00653b;
+  --appereance-button-primary-fill-default-disabled: rgba(0, 101, 59, 0.5);
+  --appereance-button-primary-fill-checkout: #ff8e0d;
+  --appereance-button-primary-fill-checkout-disabled: rgba(255, 142, 13, 0.5);
+  --appereance-button-primary-fill-delete: #e73947;
+  --appereance-button-primary-fill-delete-disabled: rgba(231, 57, 71, 0.5);
+  --button-primary-fill-alt: #bed62f;
+  --button-primary-fill-alt-disabled: rgba(190, 214, 47, 0.5);
+  --button-primary-fill-floating: #00653b;
+  --appereance-button-secondary-fill-default: transparent;
+  --appereance-button-secondary-fill-cashout: #ffffff;
+
+  /* ====== BUTTON TEXT TOKENS ====== */
+  --appereance-button-primary-text-default: #ffffff;
+  --appereance-button-primary-text-default-disabled: #ffffff;
+  --appereance-button-primary-text-checkout: #262c2f;
+  --appereance-button-primary-text-delete: #ffffff;
+  --button-primary-text-alt: #262c2f;
+  --button-primary-text-floating: #ffffff;
+  --appereance-button-secondary-text-default: #262c2f;
+  --appereance-button-secondary-text-cashout: #722dad;
+  --appereance-font-color-active: #262c2f;
+
+  /* ====== BUTTON BORDER TOKENS ====== */
+  --primary-border-secondary: #262c2f;
+  --primary-border-cashout: #722dad;
+  --appereance-border-default-bg-dark-3: #5c6063;
+}
